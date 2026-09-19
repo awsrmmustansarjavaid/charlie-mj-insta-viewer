@@ -3,6 +3,74 @@
 An independent, GitHub-Pages-first public-content viewer built with React, TypeScript, Vite and Tailwind CSS.
 
 > **Important:** This repository is a Phase 1 frontend/demo. It uses realistic mock data and does not scrape Instagram, bypass access controls, or expose private content.
+>
+
+## 🚀 Live Demo
+
+👉 **[Click here to view the live demo](https://awsrmmustansarjavaid.github.io/)**
+
+The application is deployed as a static frontend using GitHub Pages.
+
+## ✨ Features
+
+- 🔎 **Profile Search**
+  - Search mock public profiles by username.
+  - Profile overview with bio, avatar, and follower/following counts.
+  - Verified badge support.
+
+- 📖 **Stories**
+  - Story viewer and story ring UI.
+  - Story inspector with detailed metadata.
+  - Story calendar view.
+  - Timestamps, location, music, and mentions when available.
+
+- 🖼️ **Posts & Reels**
+  - Browse posts grid with captions and engagement counts.
+  - Dedicated reels feed with view counts.
+  - Repost view showing original creator and source link.
+  - Comment explorer with nested reply threads.
+
+- 📅 **Content Timeline**
+  - Unified chronological feed combining stories, posts, and reels.
+
+- ⭐ **Highlights**
+  - Highlight collection previews on profile.
+
+- 💾 **Saved Library**
+  - Save items locally to the browser.
+  - Browse and remove saved items.
+  - Backed by browser localStorage — no server required.
+
+- 🕘 **Search History**
+  - Automatically stores recently searched usernames.
+  - One-click clear history.
+  - Fully local, never transmitted anywhere.
+
+- ⚙️ **Settings**
+  - App preferences (dark mode, language, API base URL).
+  - Local storage-based configuration.
+
+- 📄 **Info Pages**
+  - About, Privacy, and Terms pages describing the demo's scope and data handling.
+
+- 📱 **Responsive UI**
+  - Desktop, tablet, and mobile-friendly layouts.
+  - Instagram-inspired look with independent branding — not affiliated with Meta/Instagram.
+
+- 🌐 **GitHub Pages Deployment**
+  - Fully static frontend, no backend required.
+  - Automated build & deploy via GitHub Actions.
+
+- 🧩 **API-Ready Architecture**
+  - Data access abstracted behind a service layer (`src/services/api.ts`).
+  - Currently backed by a mock data provider (`src/data/mockData.ts`).
+  - Structured so a real/legitimate data source could be swapped in later.
+
+- 📦 **PWA Foundation**
+  - Web app manifest included (`manifest.webmanifest`).
+  - Installable-app groundwork — no offline/service-worker support yet.
+
+> ⚠️ **Note:** This is a demo project using **mock/sample data only**. It does not fetch or display real Instagram accounts, and is not affiliated with or endorsed by Instagram or Meta.
 
 ## What is included
 
