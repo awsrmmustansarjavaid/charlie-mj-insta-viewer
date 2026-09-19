@@ -1,0 +1,9 @@
+{
+  "name": "Charlie MJ Insta",
+  "short_name": "Charlie MJ",
+  "start_url": "/charlie-mj-insta-viewer/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "description": "Independent public-content viewer demo."
+}
