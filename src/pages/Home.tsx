@@ -1,3 +1,4 @@
+// Purpose: Render the frontend demonstration home dashboard and content previews.
 import { Link } from "react-router-dom";
 import { SearchBox } from "../components/SearchBox";
 import { StoryRing } from "../components/StoryRing";

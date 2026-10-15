@@ -1,3 +1,4 @@
+// Purpose: Render the current demonstration pages for Posts, Reels, Reposts and comments.
 import { Link } from "react-router-dom";
 import { comments, posts, reels, reposts, stories } from "../data/mockData";
 import { PostCard } from "../components/PostCard";

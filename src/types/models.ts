@@ -1,3 +1,4 @@
+// Purpose: Define shared TypeScript data contracts for profiles and Instagram-style media.
 export interface Profile {
   username: string;
   displayName: string;

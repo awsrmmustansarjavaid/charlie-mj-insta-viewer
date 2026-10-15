@@ -1,3 +1,4 @@
+// Purpose: Render a profile detail page using the configured frontend data adapter.
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../services/api";

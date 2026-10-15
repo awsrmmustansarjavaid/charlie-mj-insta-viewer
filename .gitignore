@@ -1,30 +1,57 @@
-# Dependencies
+# Dependencies installed locally by npm.
 node_modules/
 
-# Production build
+# Vite and TypeScript build output.
 dist/
-
-# Vite cache
-.vite/
-
-# TypeScript build info
+dist-ssr/
 *.tsbuildinfo
 
-# Local environment files
+# Tauri/Rust build output (used when the desktop shell is added).
+src-tauri/target/
+target/
+*.pdb
+
+# Local environment files may contain API keys or provider credentials.
 .env
 .env.*
 !.env.example
 
-# IDE/editor files
+# Local application data must not be committed.
+data/
+database/
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# Downloaded media, generated reports and local activity logs are user data.
+activity/
+logs/
+backups/
+cache/
+thumbnails/
+
+# Local editor and operating-system metadata.
 .vscode/
 .idea/
-
-# OS files
 .DS_Store
 Thumbs.db
+Desktop.ini
 
-# Logs
+# Test, coverage and temporary output.
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
 *.log
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
+*.tmp
+*.temp
+
+# Signing keys, certificates and private release material.
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt

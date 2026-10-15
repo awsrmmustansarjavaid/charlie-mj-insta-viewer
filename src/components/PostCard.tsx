@@ -1,3 +1,4 @@
+// Purpose: Render a post preview card and its local save interaction.
 import { Bookmark, Heart, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import type { Post } from "../types/models";

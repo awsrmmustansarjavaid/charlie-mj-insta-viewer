@@ -1,3 +1,4 @@
+// Purpose: Render profile search results from the demonstration data set.
 import { SearchBox } from "../components/SearchBox";
 import { profiles } from "../data/mockData";
 import { Link } from "react-router-dom";

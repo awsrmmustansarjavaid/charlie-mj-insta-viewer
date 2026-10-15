@@ -1,3 +1,4 @@
+// Purpose: Render browser-local Saved Library and Search History screens.
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { clearHistory, readHistory, readSaved } from "../store/storage";

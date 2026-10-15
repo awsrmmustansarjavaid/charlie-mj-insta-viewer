@@ -1,3 +1,4 @@
+// Purpose: Provide username search input and update local search history.
 import { Search } from "lucide-react";
 import { useState } from "react";
 import type { FormEvent } from "react";

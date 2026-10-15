@@ -1,3 +1,5 @@
+// Purpose: Expose the frontend data-provider adapter used by page components.
+// Current implementation: Mock data only; a live provider is not implemented here.
 import { profiles, stories, posts, reels, reposts, comments } from "../data/mockData";
 import type { Comment, Post, Profile, Reel, Repost, Story } from "../types/models";
 

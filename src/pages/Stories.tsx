@@ -1,3 +1,4 @@
+// Purpose: Render the demonstration Story list and Story navigation.
 import { useParams, Link } from "react-router-dom";
 import { stories } from "../data/mockData";
 import { formatDateTime } from "../utils/dates";

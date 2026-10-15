@@ -1,119 +1,52 @@
-# Charlie MJ Insta Viewer
+# Charlie MJ Insta Viewer & Downloader
 
-An independent, GitHub-Pages-first public-content viewer built with React, TypeScript, Vite and Tailwind CSS.
+A planned Windows desktop application for managing supported public Instagram profile information and media workflows in one place.
 
-> **Important:** This repository is a Phase 1 frontend/demo. It uses realistic mock data and does not scrape Instagram, bypass access controls, or expose private content.
->
+![Project concept banner](assets/charlie-mj-insta-viewer-banner.png)
 
-## 🚀 Live Demo
+> **Development status:** This repository currently contains the React/Vite frontend demonstration. The Tauri desktop shell, Rust backend, SQLite persistence, live provider integrations, monitoring bot and production download engine are planned work and are not yet implemented. Mock records must not be mistaken for live Instagram data.
 
-👉 **[Click here to view the live demo](https://awsrmmustansarjavaid.github.io/)**
+## Project at a glance
 
-The application is deployed as a static frontend using GitHub Pages.
+- **Frontend prototype:** React, TypeScript, Vite and Tailwind CSS.
+- **Planned desktop framework:** Tauri 2.
+- **Planned native backend:** Rust.
+- **Planned local database:** SQLite.
+- **Target platform:** Windows 10/11 (final supported versions to be validated).
+- **Distribution goal:** Portable Windows package and optional installer.
 
-## ✨ Features
+## Planned features
 
-- 🔎 **Profile Search**
-  - Search mock public profiles by username.
-  - Profile overview with bio, avatar, and follower/following counts.
-  - Verified badge support.
+- Multi-profile management and search.
+- Stories, Story Inspector and Story calendar.
+- Publication, detection and download timestamps kept separate.
+- Mention metadata display when supplied by the connected provider.
+- Highlights, Posts, carousels, Reels and supported repost records.
+- Profile-picture viewing and downloads.
+- Scheduled profile monitoring and visibility-state history where observable.
+- New-content notifications and automatic download rules.
+- Centralized download manager and local media library.
+- Searchable activity timeline and daily/weekly/monthly Markdown reports.
+- Backup, restore, configurable settings and local-first storage.
 
-- 📖 **Stories**
-  - Story viewer and story ring UI.
-  - Story inspector with detailed metadata.
-  - Story calendar view.
-  - Timestamps, location, music, and mentions when available.
+Feature availability depends on the connected provider. The application will not bypass private-account restrictions, authentication controls or provider rate limits, and it will not invent unavailable timestamps or mention data.
 
-- 🖼️ **Posts & Reels**
-  - Browse posts grid with captions and engagement counts.
-  - Dedicated reels feed with view counts.
-  - Repost view showing original creator and source link.
-  - Comment explorer with nested reply threads.
+## Screenshots and artwork
 
-- 📅 **Content Timeline**
-  - Unified chronological feed combining stories, posts, and reels.
+The banner in `assets/` is a concept illustration for the intended design. It is not a screenshot of a completed desktop build.
 
-- ⭐ **Highlights**
-  - Highlight collection previews on profile.
+## Quick start: current frontend prototype
 
-- 💾 **Saved Library**
-  - Save items locally to the browser.
-  - Browse and remove saved items.
-  - Backed by browser localStorage — no server required.
+### Requirements
 
-- 🕘 **Search History**
-  - Automatically stores recently searched usernames.
-  - One-click clear history.
-  - Fully local, never transmitted anywhere.
+- Git
+- Node.js LTS
+- npm
 
-- ⚙️ **Settings**
-  - App preferences (dark mode, language, API base URL).
-  - Local storage-based configuration.
+### Run locally
 
-- 📄 **Info Pages**
-  - About, Privacy, and Terms pages describing the demo's scope and data handling.
-
-- 📱 **Responsive UI**
-  - Desktop, tablet, and mobile-friendly layouts.
-  - Instagram-inspired look with independent branding — not affiliated with Meta/Instagram.
-
-- 🌐 **GitHub Pages Deployment**
-  - Fully static frontend, no backend required.
-  - Automated build & deploy via GitHub Actions.
-
-- 🧩 **API-Ready Architecture**
-  - Data access abstracted behind a service layer (`src/services/api.ts`).
-  - Currently backed by a mock data provider (`src/data/mockData.ts`).
-  - Structured so a real/legitimate data source could be swapped in later.
-
-- 📦 **PWA Foundation**
-  - Web app manifest included (`manifest.webmanifest`).
-  - Installable-app groundwork — no offline/service-worker support yet.
-
-> ⚠️ **Note:** This is a demo project using **mock/sample data only**. It does not fetch or display real Instagram accounts, and is not affiliated with or endorsed by Instagram or Meta.
-
-## What is included
-
-- Responsive Instagram-inspired UI without copying Instagram branding.
-- Profile search and profile pages.
-- Stories, Story Viewer and Story Inspector.
-- Story timeline and calendar-style views.
-- Posts, reels, reposts, highlights and comments.
-- Saved library and search history using browser storage.
-- Settings, About, Privacy and Terms screens.
-- API adapter layer ready for a legitimate external data provider.
-- PWA manifest.
-- GitHub Actions deployment to GitHub Pages.
-- Mock data so the project works immediately without a backend.
-
-## Architecture
-
-```text
-Browser
-  |
-  +--> React + TypeScript + Vite
-  |       |
-  |       +--> Local storage (saved items, history, settings)
-  |       |
-  |       +--> API adapter
-  |                |
-  |                +--> Mock provider (default)
-  |                +--> Future legitimate API/backend
-  |
-  +--> GitHub Pages
-```
-
-GitHub Pages hosts the static frontend. It does not provide a server-side runtime. If live data is added later, the frontend should call a legitimate HTTPS API or a separately hosted backend.
-
-## Run locally
-
-Requirements:
-
-- Node.js 20+
-- npm 10+
-
-```bash
-git clone https://github.com/YOUR_USERNAME/charlie-mj-insta-viewer.git
+```powershell
+git clone https://github.com/awsrmmustansarjavaid/charlie-mj-insta-viewer.git
 cd charlie-mj-insta-viewer
 npm install
 npm run dev
@@ -121,90 +54,64 @@ npm run dev
 
 Open the local URL printed by Vite.
 
-## Build
+### Build the web frontend
 
-```bash
+```powershell
 npm run build
 npm run preview
 ```
 
-## GitHub Pages
+The output is written to `dist/`. This is a static web build, **not** a Windows EXE.
 
-1. Create a repository named `charlie-mj-insta-viewer`.
-2. Push this project to the `main` branch.
-3. Open **Settings → Pages**.
-4. Set the source to **GitHub Actions**.
-5. The workflow in `.github/workflows/deploy.yml` builds and publishes the `dist/` directory.
-6. The Vite base path is already configured for `/charlie-mj-insta-viewer/`.
+## Planned Windows desktop build
 
-If you choose another repository name, update `base` in `vite.config.ts` and `start_url` in `public/manifest.webmanifest`.
+Tauri has not yet been integrated into the current prototype. After the Tauri project, Rust backend, Windows prerequisites and desktop scripts are implemented, the intended workflow will be similar to:
 
-## Project structure
-
-```text
-charlie-mj-insta-viewer/
-├── .github/workflows/deploy.yml
-├── public/
-│   ├── favicon.svg
-│   ├── manifest.webmanifest
-│   └── robots.txt
-├── src/
-│   ├── components/
-│   ├── data/
-│   ├── pages/
-│   ├── services/
-│   ├── store/
-│   ├── types/
-│   ├── utils/
-│   ├── App.tsx
-│   ├── index.css
-│   └── main.tsx
-├── .env.example
-├── .gitignore
-├── index.html
-├── package.json
-├── postcss.config.js
-├── tailwind.config.js
-├── tsconfig*.json
-└── vite.config.ts
+```powershell
+npm install
+npm run tauri:dev
+npm run tauri:build
 ```
 
-## Data and privacy model
+These commands are future targets and are not available in the current repository until configured. See [Windows Build Guide](docs/BUILD_WINDOWS.md).
 
-The demo intentionally separates UI behavior from the data provider.
+## Repository documentation
 
-- Exact timestamps are shown only when the data object contains an exact timestamp.
-- An expired Story cannot be magically recovered if the application never legitimately observed or retained it.
-- The archive concept is for metadata captured while content was legitimately available.
-- Download actions are demo placeholders; a production provider must only return media the user is permitted to receive.
-- No Instagram login credentials are requested.
-- No secrets belong in frontend environment variables.
+- [Project Overview](docs/PROJECT_OVERVIEW.md) — purpose, motivation, goals and current status.
+- [Architecture Design](docs/ARCHITECTURE.md) — frontend, Tauri/Rust, providers, scheduler, downloader and storage boundaries.
+- [Feature Catalogue](docs/FEATURES.md) — detailed feature inventory and acceptance expectations.
+- [Development Guide](docs/DEVELOPMENT.md) — prerequisites, current commands, workflow and definition of done.
+- [Windows Build Guide](docs/BUILD_WINDOWS.md) — web build versus future portable desktop packaging.
+- [Data Providers](docs/DATA_PROVIDERS.md) — provider interface, capability registry and metadata provenance.
+- [Database Design](docs/DATABASE.md) — proposed SQLite entities, timestamps, indexes and migrations.
+- [Frontend Design Guide](docs/DESIGN_GUIDE.md) — navigation, grids, Story Inspector and visual principles.
+- [Code Comment Standards](docs/COMMENTING_STANDARDS.md) — required comments and file documentation conventions.
+- [Security & Privacy](docs/SECURITY_PRIVACY.md) — local data, credentials, filesystem and responsible provider use.
+- [Development Roadmap](docs/ROADMAP.md) — phased implementation and exit criteria.
 
-## Future live-data integration
+## Code documentation policy
 
-Implement a provider behind `src/services/api.ts` and map external responses into the internal types under `src/types/`.
+Every authored source file should include a useful purpose comment or module docstring where the file format supports comments. Comments must explain responsibility, important decisions and side effects—not merely repeat code.
 
-Recommended flow:
+Strict JSON formats do not support comments. Do not add comments to `package.json`, lockfiles or `.webmanifest`; document those settings in the relevant Markdown files instead. See [Code Comment Standards](docs/COMMENTING_STANDARDS.md).
 
-```text
-GitHub Pages
-   |
-   v
-api.ts
-   |
-   v
-Legitimate data API
-   |
-   v
-Publicly accessible content
-```
+## Data provider and feature limitations
 
-Do not put private API credentials, cookies, session tokens or scraping credentials into the browser bundle.
+Instagram API capabilities and third-party provider access vary by account type, permissions, endpoint and provider terms. The app must show capability status for each operation. Exact Story publication times, structured Story mentions, arbitrary follower/following lists, Highlights and repost records must not be promised unless the selected authorized source actually provides them.
 
-## License
+## Existing frontend preservation
 
-Add the license you want to use before publishing the repository.
+The current frontend is the starting point. New desktop functionality should be added incrementally, retaining existing routes, components, models and local demo behavior until an equivalent replacement is implemented and tested.
+
+## Contributing / development
+
+Before changing a feature:
+1. Read the relevant documents in `docs/`.
+2. Check the existing implementation and preserve its behavior.
+3. Add tests for new behavior.
+4. Update the feature and architecture documentation.
+5. Verify the build and clearly document any unsupported capability.
 
 ## Disclaimer
 
-Charlie MJ Insta is an independent project and is not affiliated with, sponsored by, or endorsed by Instagram or Meta.
+Charlie MJ Insta Viewer & Downloader is an independent project and is not affiliated with, endorsed by or sponsored by Instagram or Meta. Use only data sources and workflows that you are authorized to use. Respect platform terms, creator rights and applicable laws.

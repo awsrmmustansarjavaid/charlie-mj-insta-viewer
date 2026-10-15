@@ -1,3 +1,4 @@
+// Purpose: Format date values for display and provide safe fallbacks for missing dates.
 export function formatDate(value?: string): string {
   if (!value) return "Date unavailable";
   return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(value));

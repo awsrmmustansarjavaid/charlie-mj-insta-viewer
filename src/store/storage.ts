@@ -1,3 +1,5 @@
+// Purpose: Encapsulate browser localStorage operations for saved items, history and settings.
+// Desktop migration note: Replace or adapt this storage boundary when SQLite is introduced.
 const SAVED_KEY = "cmj_saved_items";
 const HISTORY_KEY = "cmj_search_history";
 const SETTINGS_KEY = "cmj_settings";

@@ -1,3 +1,4 @@
+// Purpose: Render and persist frontend demonstration preferences in browser storage.
 import { useEffect, useState } from "react";
 import { readSettings, saveSettings } from "../store/storage";
 

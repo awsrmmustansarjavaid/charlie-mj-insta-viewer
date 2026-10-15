@@ -1,3 +1,5 @@
+# Purpose: Build and deploy the current static web demonstration to GitHub Pages.
+# Notes: This workflow does not build the future Tauri Windows desktop application.
 name: Deploy to GitHub Pages
 
 on:

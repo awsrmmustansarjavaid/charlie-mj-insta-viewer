@@ -1,3 +1,4 @@
+// Purpose: Render the shared application layout and primary navigation.
 import { NavLink } from "react-router-dom";
 import { Clock3, Home, Bookmark, Search, Settings, UserRound } from "lucide-react";
 import type { ReactNode } from "react";

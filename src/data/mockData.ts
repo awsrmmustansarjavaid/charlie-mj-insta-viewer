@@ -1,3 +1,5 @@
+// Purpose: Supply demonstration-only profile, Story, Post, Reel, Repost and comment data.
+// Warning: These records are fixtures and must never be presented as live Instagram results.
 import type { Comment, Post, Profile, Reel, Repost, Story } from "../types/models";
 
 export const profiles: Profile[] = [

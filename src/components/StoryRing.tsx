@@ -1,3 +1,4 @@
+// Purpose: Render a profile's Story preview ring and navigation link.
 import type { Story } from "../types/models";
 import { Link } from "react-router-dom";
 

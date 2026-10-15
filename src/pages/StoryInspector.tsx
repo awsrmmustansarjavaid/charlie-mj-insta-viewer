@@ -1,3 +1,4 @@
+// Purpose: Display the available demonstration metadata for a selected Story.
 import { Link, useParams } from "react-router-dom";
 import { stories } from "../data/mockData";
 import { formatDate, formatDateTime } from "../utils/dates";

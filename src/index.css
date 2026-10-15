@@ -1,3 +1,4 @@
+/* Purpose: Define global styles and Tailwind CSS layers for the frontend. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
