@@ -22,13 +22,10 @@ instagram-research-suite = "instagram_research_suite.main:main"
 where = ["src"]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 
-[tool.pytest.ini_options]
-pythonpath = ["."]
-testpaths = ["tests"]
