@@ -3212,3 +3212,2028 @@ These are potential additions to the combined concept, not claims that all four 
 
 Important: These are independent third-party services, not official Instagram products. Their advertised capabilities can change, and actual availability depends on Instagram's access restrictions and the services' data providers. Public profile content is the appropriate scope; private-account restrictions should not be bypassed. Downloaded content remains subject to its creator's copyright.
 ---
+I understand: you're asking for an existing GitHub repository you can use to generate a Windows portable .exe with the Instagram viewer, downloader, profile tracking, story/highlight viewing, download queue and notification features we discussed—not another copy of your demo.
+I’ll distinguish between repositories that provide a working Instagram downloader and desktop packaging, and those that would still need substantial development to match your full feature list.
+I found two particularly relevant GitHub repositories. One is a closer match for your full feature list; the other specifically advertises a portable Windows executable.
+1. Best overall feature match: insta-dl-gui
+
+
+
+
+
+
+
+
+
+insta-dl-gui
+Best feature match
+Tauri / Rust desktop application
+GitHub repository
+· Windows releases
+
+
+It already supports:
+- Public profile exploration and profile information.
+- Posts, photos, videos and carousels.
+- Reels and active stories.
+- Highlights and highlight downloads.
+- HD profile pictures.
+- Bulk profile downloads.
+- Download queue, progress and cancellation.
+- Duplicate-job prevention.
+- Local media library, search and filters.
+- Metadata sidecar files.
+Its documentation describes these features, and its releases include Windows .exe installers. 
+
+
+GitHub
++1
+
+
+
+Important: It currently provides a Windows setup executable, not necessarily the standalone portable .exe you want. It also requires a HikerAPI token.
+2. Best portable EXE starting point: Instaloader GUI Wrapper
+
+
+
+
+
+
+
+
+
+Instaloader GUI Wrapper
+Portable EXE advertised
+Python + PyQt6
+GitHub repository
+· Releases
+
+
+Advertised features include:
+- Profile downloads.
+- Stories and highlights.
+- Profile pictures.
+- Saved posts.
+- Individual post, reel and story downloads.
+- Two-factor authentication support.
+- Portable Windows .exe and Linux AppImage.
+The project author specifically describes it as a portable desktop application. 
+
+
+Reddit
+
+
+
+Check the latest release and build instructions before relying on its executable.
+3. Another useful desktop project: MediaLoader
+
+
+
+
+
+
+
+
+
+MediaLoader
+GitHub repository
+· Project information
+
+
+Features include:
+- Instagram posts and reels.
+- Download queue.
+- Progress tracking.
+- Download history.
+- Dark and light themes.
+- Standalone Windows executable.
+However, it does not advertise the full stories, highlights and profile-monitoring system you described. 
+
+
+GitHub
+
+
+
+
+Feature comparison against your requirements
+Your required feature	insta-dl-gui	Instaloader GUI Wrapper	MediaLoader
+Windows executable	Yes	Portable advertised	Portable
+Profile information	Yes	Yes	Limited
+Posts and carousels	Yes	Yes	Limited
+Reels	Yes	Yes	Yes
+Stories	Yes	Yes	Not advertised
+Highlights	Yes	Yes	Not advertised
+HD profile pictures	Yes	Yes	Not advertised
+Download queue	Yes	Check project	Yes
+Local media library	Yes	Check project	History
+Profile change monitoring	Not advertised	Not advertised	Not advertised
+Scheduled monitoring	Not advertised	Not advertised	Not advertised
+Activity reports in Markdown	Not advertised	Not advertised	Not advertised
+My recommendation
+Start with insta-dl-gui if your priority is the closest existing feature set. Start with Instaloader GUI Wrapper if a portable .exe is your highest priority.
+I could not identify one existing repository that already combines every feature you requested, particularly scheduled multi-profile monitoring, notifications, detailed activity reports, custom filename templates and a portable Windows build.
+For your Charlie MJ project, these are starting points—not complete replacements for your planned application.
+---
+# Instagram App Project
+
+these are my instagram fav tool and i need their features and functionalities and i want you write all their feature and functionalities with theire website app and in bullet point list and do not miss any feature and functionalities i need everything about these tools and also how these website work to view any public instagram account without login or that person know i am following him or her
+[https://igexport.com/en/ig-story-download/](https://igexport.com/en/ig-story-download/)
+[https://inflact.com/instagram-profile-viewer/](https://inflact.com/instagram-profile-viewer/)
+[https://www.save-free.com/en/instagram-viewer](https://www.save-free.com/en/instagram-viewer) 
+[https://insta-stories.io/en/](https://insta-stories.io/en/) [https://pvstory.com/](https://pvstory.com/) [https://www.dolphinradar.com/anonymous-instagram-story-viewer](https://www.dolphinradar.com/anonymous-instagram-story-viewer)
+[https://www.dolphinradar.com/instagram-new-follow-tracker](https://www.dolphinradar.com/instagram-new-follow-tracker) 
+[https://recently-followed.com/](https://recently-followed.com/) 
+[https://followspy.ai/](https://followspy.ai/) 
+[https://www.ifollowtracker.com/](https://www.ifollowtracker.com/) 
+
+ [https://igstoryviewer.to/en/](https://igstoryviewer.to/en/) 
+[https://imginn.com/stories/](https://imginn.com/stories/)
+[https://unfollowcheck.com/scan/](https://unfollowcheck.com/scan/)
+[https://anonyig.com/en1/iganony/](https://anonyig.com/en1/iganony/) 
+[https://www.pixnoy.com](https://www.pixnoy.com)
+ [https://www.storysaver.net/en](https://www.storysaver.net/en)  
+[https://insnoop.com/](https://insnoop.com/)
+
+
+# Complete Instagram Tools Analysis: Features, Functionalities, Websites & Technical Working
+
+You have selected 16 Instagram-related tools covering anonymous Instagram viewing, Story downloading, profile browsing, follower tracking, follow/unfollow monitoring, and Instagram account analytics.
+
+These tools are particularly interesting because they offer functionality that Instagram does not provide directly, especially viewing publicly available content without logging into an Instagram account.
+
+I'll organize the analysis into the following categories:
+
+1. Anonymous Instagram Story Viewers.
+2. Instagram Profile Viewers and Browsers.
+3. Instagram Story, Photo, Video and Reels Downloaders.
+4. Instagram New Followers and Following Trackers.
+5. Unfollowers and Follow-back Checkers.
+6. Instagram Monitoring and Analytics.
+7. How these services work technically.
+8. Privacy, anonymity, limitations and security.
+9. Feature comparison and ideas for building your own application.
+
+Important distinction: Viewing a public profile anonymously is different from secretly accessing a private account. These services cannot legitimately bypass Instagram's private-account permissions. Also, anonymous Story viewing does not mean every form of activity is invisible.
+
+## 1. IGExport — Instagram Story Downloader
+
+[Anonymous Instagram Story Viewer: How It Actually Works (and How to Pick a Good One)](https://images.openai.com/static-rsc-4/Qm9L6ptP62Yfir7Y1ATVcTu3NbBDRjOW-d--WrSACDsboSxLWI8W6zh2B8Agwa0h9pzhNXlquZhjWnYgHNJMa8HiL8M8VRqajvb3x7mSQdNNeCkZYrOj2QFEI4hytJLY1lQ3h4laT09mblfKU0BsVG7l1lnnPyBeNo_XdvFvNhc?purpose=inline)
+
+Website: [igexport.com](https://igexport.com/en/ig-story-download/?utm_source=chatgpt.com)
+
+Main category: Anonymous viewing and content downloading.
+
+Public accounts
+
+### Features and functionalities
+
+\- Anonymous Story Viewer
+
+- View currently available Stories from public Instagram accounts.
+- Does not require an Instagram account.
+- Does not require Instagram login credentials.
+- The viewer claims that the account owner will not see your identity in their Story viewer list.
+
+\- Instagram Highlights Viewer
+
+- View publicly available Highlights.
+- Browse saved Story collections.
+- Access Highlights after the original 24-hour Story period, provided they remain published.
+
+\- Story Downloader
+
+- Download Story images in JPG format.
+- Download Story videos in MP4 format.
+- Save media at the original available quality.
+- Download without an added watermark, according to the website.
+
+\- Story Information
+
+- Display accounts mentioned or tagged in Stories.
+- View currently available Story content.
+
+\- Username and URL Search
+
+- Search using an Instagram username.
+- Paste a complete Instagram profile URL.
+- Search public profiles without signing in.
+
+\- Local Search History
+
+- Save recent searches in browser local storage.
+- Reopen previously searched profiles.
+- Clear local search history.
+
+\- Additional Instagram Tools
+
+- Reels Downloader.
+- Video Downloader.
+- Photo Downloader.
+- Profile Viewer.
+- Profile Picture Viewer.
+- Highlights Downloader.
+- Unfollowers.
+- Block Checker.
+- Instagram-to-MP3.
+- Repost Viewer.
+- Follower Export.
+
+\- Recent Follow Integration
+
+- Track newly followed accounts.
+- Receive notifications about new following activity through its associated app.
+- View a timeline of recent follows.
+- Identify mutual friends.
+
+### How it works
+
+1. Enter a public Instagram username.
+2. IGExport's server retrieves publicly available Story information and media.
+3. Its website displays the retrieved Stories.
+4. You select a Story to view.
+5. You can download the available image or video.
+
+Technical distinction: IGExport says its server fetches Stories rather than your browser accessing Instagram through your personal account. This is the central mechanism behind its anonymous-viewing claim.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://igexport.com\&sz=32)
+
+IGExport
+
+
+
+## 2. Inflact — Instagram Profile Viewer
+
+[Instagram Profil Viewer ✧ Privat](https://images.openai.com/static-rsc-4/44ZS2X5gvqG71DnJyEPGDpQixJX9XHtEMjTe_inwsEn7QtqCgeOVGx-XhKXK6aUQbP8d4HlQlZuJkfnSQrFjGueR-otWLULefxIzmINmd91cJT43KcDtoHXaa6BydiQZxnhGrXdigLmHpdf1IW8KbghyNszw2VBXRFbbye-sywI?purpose=inline)
+
+Website: [inflact.com](https://inflact.com/instagram-profile-viewer/?utm_source=chatgpt.com)
+
+Main category: Profile browsing, downloading and analytics.
+
+Public profiles
+
+### Features and functionalities
+
+\- Instagram Profile Viewer
+
+- Browse public Instagram profiles.
+- View profile information.
+- View profile pictures.
+- View profile bios.
+- Browse publicly available posts.
+- View public photos and videos.
+- Browse available Stories.
+- Browse Reels.
+- View Highlights.
+- Browse multiple types of profile content in one interface.
+
+\- Anonymous Browsing
+
+- No Instagram account required.
+- No Instagram login required for the public viewer.
+- Browse without appearing in the profile owner's Story viewer list when using its anonymous Story functionality.
+- No need to install a browser extension.
+
+\- Instagram Content Downloader
+
+- Photo downloading.
+- Video downloading.
+- Story downloading.
+- Highlight downloading.
+- Reels downloading.
+- Profile picture downloading.
+- Profile content saving.
+
+\- Profile Analyzer
+
+- Analyze Instagram profiles.
+- Review creator performance.
+- Research competitors.
+- Examine influencer accounts.
+- Review available engagement information.
+- Evaluate accounts before influencer collaborations.
+
+\- Instagram Profile Search
+
+- Discover Instagram users.
+- Search for creators.
+- Identify potential influencers.
+- Research accounts by niche and performance.
+
+\- Instagram Tracker
+
+- Track selected Instagram profiles.
+- Monitor Stories.
+- Automatically save Stories with the premium tracker.
+- Monitor followers.
+- Track likes.
+- Track comments.
+- Access account analytics.
+
+\- Premium Functionality
+
+- Higher or unlimited profile-viewing limits.
+- Higher or unlimited content-viewing limits.
+- Higher or unlimited downloading limits.
+- Multiple profile tracking.
+- Premium proxy infrastructure.
+- Story tracking and automatic saving.
+- Followers, likes and comments analytics.
+
+\- Other Marketing Tools
+
+- Hashtag Generator.
+- Hashtag Trends.
+- Instagram Fonts Generator.
+- User Search.
+- Profile Analyzer.
+- Profile Tracker.
+
+### How it works
+
+1. Enter an Instagram username or profile URL.
+2. Inflact retrieves available public profile information.
+3. The website displays the supported profile content.
+4. Select Posts, Stories, Reels or Highlights.
+5. Browse or download available content.
+
+Inflact has a free usage allowance and premium plans with additional limits and tracking capabilities. Its current page also describes a paid Stories Saver and Account Tracker offering.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://inflact.com\&sz=32)
+
+Browse Public Profiles Anonymously
+
+
+
+## 3. Save-Free — Anonymous Instagram Viewer
+
+[Instagram Viewer - View Instagram Story, post and Profile Picture](https://images.openai.com/static-rsc-4/Ionj78vILRolrMD3R-WY7OZmARIjq7bvc-dvoKrP57WkpbMy_WYjcKi3cgrdQvPRLuTi5k6VUZPGbsB2bd_bNzQTOGX3rqU1lna_jVToBR4nm2muEl0Nt449D94GKzUCXes5p8xBAN6T2aCNkh5VPMYusCAAm5feMnZjXn6EZQc?purpose=inline)
+
+Website: [save-free.com](https://www.save-free.com/en/instagram-viewer/?utm_source=chatgpt.com)
+
+Main category: Anonymous profile and content browsing.
+
+### Features and functionalities
+
+- Anonymous Instagram content viewing.
+- Public Instagram profile lookup.
+- Username-based searching.
+- Public profile browsing.
+- Viewing publicly available photos.
+- Viewing publicly available videos.
+- Story viewing where supported.
+- Downloading supported Instagram media.
+- Browser-based access.
+- No requirement to install an application.
+- No requirement to log in to Instagram for its public-viewer functionality.
+- Multiple language options.
+- Mobile and desktop browser support.
+
+Important: The accessible page did not expose enough detailed functionality to verify every download format, tracking feature or usage restriction. Those should not be assumed to exist without testing the live service.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.save-free.com\&sz=32)
+
+view instagram without account
+
+
+
+## 4. Insta-Stories.io — Anonymous Instagram Stories Viewer
+
+[Instagram Story Viewer — Anonymous Stories, Reels & Highlights](https://images.openai.com/static-rsc-4/y6ZuFcKHZ3Ddwt3_dxlOMns00KKrcj7Hwel8U_X77TlANyJkuOepybptsEanU1_vqHLAMQS1e7dWXj8NgHQ2xwk49MkdMXn0aRmgl9q58U2ugyFEZQkFJdFhfOHxuAqMvxjZZxO1sC18EQFL61BXqTB47mq_UvPTkw9iT1pTzFo?purpose=inline)
+
+Website: [insta-stories.io](https://insta-stories.io/en/?utm_source=chatgpt.com)
+
+Main category: Anonymous Story browsing.
+
+### Features and functionalities
+
+- Anonymous Instagram Story viewing.
+- Public Instagram username lookup.
+- Search public Instagram accounts.
+- Browse available Stories.
+- Access supported public account content without an Instagram login.
+- Browser-based operation.
+- No installation requirement.
+- Mobile browser compatibility.
+- Desktop browser compatibility.
+- Story content viewing without using your personal Instagram identity.
+- Potential media-saving functionality where offered by the live interface.
+
+How it works: You provide a username, the service attempts to retrieve the account's available public Story content, and the content is displayed through its own website.
+
+I could confirm the site's identity and purpose, but not every detailed feature or current usage restriction from the accessible page.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://insta-stories.io\&sz=32)
+
+View Stories Without Login
+
+
+
+## 5. PVStory — Instagram Story and Followers Viewer
+
+[Instagram Story and Followers Viewer  | Insta PV Story](https://images.openai.com/static-rsc-4/JG4gxRCQbVU6s9cm1Az-GSr-q0pP4OeJrx4C6pTq30e5ibFu9oT0OGNQL7ukH3-VbYKHprgDdu2wL8zGjsOE8OWiCDwRIk9eyvK7Dc_vqgT-MgGmQX0Fc8KhQu4RLCTgUHUnU8W_2nbLylW0y2AHfzYIQ_ojTG4e9iKgu0s3PUg?purpose=inline)
+
+Website: [pvstory.com](https://pvstory.com/?utm_source=chatgpt.com)
+
+Main category: Story browsing and follower information.
+
+### Features and functionalities
+
+- Instagram Story viewer.
+- Public profile lookup.
+- Instagram username searching.
+- Public Story browsing.
+- Follower information viewing where publicly available.
+- Following information viewing where publicly available.
+- Profile-related information.
+- Browser-based access.
+- No requirement to install a desktop application.
+- Public account information exploration.
+
+Potentially important distinction: A Followers Viewer displays available follower information; it is not necessarily a historical follower tracker. Historical tracking requires collecting and comparing snapshots over time.
+
+I could not independently verify all the site's detailed functionality from the accessible page.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://pvstory.com\&sz=32)
+
+Insta PV Story
+
+
+
+## 6. Dolphin Radar — Anonymous Instagram Story Viewer
+
+[Instagram Story Downloader – Save IG Stories Online](https://images.openai.com/static-rsc-4/hfA7Bt2861zk66MedYarIs-LD68hvH-uQ48FLczPkovVrgiX73KdkCxAfNxvIidX6n1FF6NjM1Hm5XF8ySfW7xPl7BJ9zZZbR4ro4NvHYi15ul6Ke-5AwN7xdfMwxFr-SNcumE0b9kP_bQYqc1dyIkaVmfK-XT4PvdzRKPZSRSE?purpose=inline)
+
+Website: [dolphinradar.com](https://www.dolphinradar.com/anonymous-instagram-story-viewer?utm_source=chatgpt.com)
+
+Main category: Anonymous Stories and monitoring.
+
+### Features and functionalities
+
+- Anonymous Story viewing.
+- Public Instagram account searching.
+- Username-based lookup.
+- Public Story browsing.
+- Story monitoring through associated Dolphin Radar products.
+- Browser-based access.
+- Viewing without using your personal Instagram account for the anonymous public-viewer functionality.
+- Content monitoring options through the wider platform.
+
+Dolphin Radar is particularly interesting because it also offers a separate follower and following monitoring product, which is a different functionality from simply viewing Stories.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.dolphinradar.com\&sz=32)
+
+Free, Anonymous, No Login Required
+
+
+
+## 7. Dolphin Radar — Instagram New Follow Tracker
+
+[Track Recent Instagram Follows & Mutual Connections (Fast & Anonymous) | Dolphin Radar](https://images.openai.com/static-rsc-4/Fp-6WRZL_59vhE96Xd99egYUG6en2VkEoUlZ3rI7ble7e-DNhRXMezaOnNCHWYVjOe-n_6VlfxXXLHm2c_6WHf2Q8jrVms5Btm5Ms3MQPjY2Ah1CfCAL3qA1dDvIJ57NoDMJ1rYzWuM79t9CUVI73OHSbCEvY2mH9krks-FLvW8?purpose=inline)
+
+Website: [dolphinradar.com](https://www.dolphinradar.com/instagram-new-follow-tracker?utm_source=chatgpt.com)
+
+Main category: Recent followers and following activity.
+
+Public account tracking
+
+This is one of the more interesting tools in your collection because it goes beyond ordinary Instagram profile viewing.
+
+### Features and functionalities
+
+\- Recent Following Tracker
+
+- Discover accounts recently followed by a public Instagram user.
+- Review changes to a Following list.
+- Identify newly added following connections.
+- View following activity updates.
+- Compare current following information with previously collected information.
+
+\- Recent Followers Tracker
+
+- Discover new followers.
+- Monitor changes to follower lists.
+- Identify newly added followers.
+- Review follower activity.
+
+\- Chronological Activity
+
+- Display recent activity in a timeline.
+- Show relative timestamps in the activity interface.
+- Organize following changes into updates.
+
+\- Anonymous Tracking
+
+- Search public accounts without Instagram login.
+- Avoid using your personal Instagram identity for public-data lookups.
+
+\- Ongoing Updates
+
+- Start monitoring a selected profile.
+- Detect newly observed following changes.
+- Display new activity through the monitoring interface.
+
+\- Additional Dolphin Radar Tools
+
+- Recent Follow.
+- Unfollow Tracker.
+- Recent Mutual.
+- Follower Export.
+- Post Comments.
+- Repost.
+- Story Viewer.
+
+\- Story Viewer Integration
+
+- View available public Stories.
+- Download Stories and Highlights.
+- Explore mentions and links.
+- View public Reels and Posts through the associated viewer.
+
+### How it works
+
+1. Enter the public Instagram username.
+2. Dolphin Radar retrieves the available follower or following information.
+3. It establishes a starting list.
+4. It periodically checks for changes.
+5. When a new account appears, it records the difference.
+6. The new activity can appear in the monitoring timeline.
+
+Important: The service itself explains that the current Following list becomes the starting point, and subsequently observed accounts appear as Following Updates. This means historical tracking depends on when monitoring started and what data the service managed to collect.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.dolphinradar.com\&sz=32)
+
+Track Followers & Following
+
++1
+
+
+
+## 8. Recently Followed — Instagram Recent Following Tracker
+
+[How to See Someone’s Latest Followers on Instagram](https://images.openai.com/static-rsc-4/NHnhIplakBLKDKGfMv9pEJWE8ktFZBFcHP8bo2fvtdXqIS6ZkKFZm81o4LJvgK8qnO9tGYkkKm8-ccB_TjWX745U_7gcziBbxK_s6VVr5OKZtXtID7mc_xr_5Koi-FA3rvk4Vw9iwBkwBDmscakWybjyfY1-mVd_SwxNhIQup3E?purpose=inline)
+
+Website: [recently-followed.com](https://recently-followed.com/?utm_source=chatgpt.com)
+
+Main category: Recent following and follower discovery.
+
+### Features and functionalities
+
+\- Recently Followed Accounts
+
+- Discover recently followed Instagram accounts.
+- Inspect a public profile's Following list.
+- Identify newer following connections.
+- Review available following information.
+
+\- Recent Followers
+
+- See recently added followers.
+- Review public follower information.
+
+\- Anonymous Searching
+
+- Search using an Instagram username.
+- No personal Instagram login required for the public lookup.
+- No need to follow the target account.
+- Public accounts only.
+
+\- Instant Lookup
+
+- Search a username.
+- Retrieve available profile information.
+- Display a result preview.
+- Process profile information through its lookup workflow.
+
+\- Premium Subscription
+
+- Unlimited searches, according to its advertised plan.
+- Access to all follows and followers.
+- Weekly and monthly subscription choices.
+- Cancellation option.
+
+\- User Interface
+
+- Username search.
+- Reveal User button.
+- Loading/progress screen.
+- Profile lookup error handling.
+- Private-account detection.
+- Subscription and upgrade interface.
+- Help and support options.
+
+### How it works
+
+1. Enter an Instagram username.
+2. The service checks whether the account is publicly accessible.
+3. It retrieves available profile and connection information.
+4. It processes the information.
+5. It displays the available recent following and follower results.
+
+### Limitations
+
+- Private accounts cannot be tracked through the public lookup.
+- It depends on accessible Instagram data.
+- Its historical accuracy depends on available snapshots.
+- A recent ordering should not automatically be treated as a verified timestamp of when someone followed another account.
+
+The website advertises instant results, anonymous access, and a paid plan.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://recently-followed.com\&sz=32)
+
+See Followers & Following
+
++1
+
+
+
+## 9. FollowSpy — Instagram Follower Tracker
+
+[Followspy.ai: análisis de riesgo de estafa (Confianza 1/100)](https://images.openai.com/static-rsc-4/sZ-BUbeJzYG4ruX-k7yb97sl3_lV-vKpQ1tuf2NJkhHP4xhFkWw0Gx90MRdqmS2lxP_WQkDUeKrBVv0VxNABp5SycWYiMao-MNW4ja33nLN7qDv8fTYu2sEkX3yFv-WhvMwIVuxn3RDAABj9F9drLXi6yD0twxWI1bMC5q1QdJY?purpose=inline)
+
+Website: [followspy.ai](https://followspy.ai/?utm_source=chatgpt.com)
+
+Main category: Following, followers and unfollow monitoring.
+
+Multiple tracking functions
+
+### Features and functionalities
+
+\- New Following Tracker
+
+- Discover who a public account recently followed.
+- Review its following connections.
+- Identify new following relationships.
+- Sort connections chronologically.
+
+\- New Followers Tracker
+
+- Identify newly appearing followers.
+- Review new follower activity.
+- Monitor changes in follower connections.
+
+\- Unfollowers Tracker
+
+- Discover accounts that have unfollowed a monitored profile.
+- Identify removed follower relationships.
+- Review when a change was detected.
+
+\- Chronological Following List
+
+- Sort following connections from newest to oldest.
+- Review the available following history.
+- Find recently added connections more easily.
+
+\- Anonymous Instagram Story Viewer
+
+- Browse available public Stories.
+- Access Stories without an Instagram login.
+- Use the associated Story viewer functionality.
+
+\- Public Profile Lookup
+
+- Enter an Instagram username.
+- Search without an Instagram account.
+- Retrieve available public follower and following information.
+
+\- Monitoring
+
+- Track selected accounts.
+- Observe new connections.
+- Monitor changes over time.
+
+### How it works
+
+1. Enter a public Instagram username.
+2. FollowSpy retrieves public follower and following lists.
+3. It processes the connections.
+4. It organizes the results chronologically.
+5. You can inspect recent follows, followers and unfollowers.
+
+FollowSpy specifically advertises new following, new followers, unfollowers, chronological ordering and Story viewing.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://followspy.ai\&sz=32)
+
+FollowSpy
+
++1
+
+
+
+## 10. iFollowTracker — Instagram Activity Tracker
+
+[Instagram Activity Tracker for Public Accounts](https://images.openai.com/static-rsc-4/026NdaS-KiBYqv4fQXene0Wu5nNFDBpBONjBt9OrQAIlw-G9Bq37R9sp_oZX1ib1KhUtstL7o7tm_64TT2ApNLlbdXtzGnPphcFHF3GxTaFG6bU3sMdCGQQEAOTRItiEBV0GTlybqG09FD1xhUVJCG_8tRG7RtSSpcDLjqeQsFk?purpose=inline)
+
+Website: [ifollowtracker.com](https://www.ifollowtracker.com/?utm_source=chatgpt.com)
+
+Main category: Public profile activity monitoring.
+
+### Features and functionalities
+
+Its navigation exposes the following separate tools:
+
+\- Recent Follows
+
+- Review recently observed following connections.
+- Research public Following lists.
+
+\- Recent Followers
+
+- Inspect recently observed follower information.
+- Review changes in follower connections.
+
+\- Following Changes
+
+- Compare Following information across repeat checks.
+- Identify accounts appearing or disappearing from the visible list.
+
+\- Unfollow Tracker
+
+- Track changes in follower relationships.
+- Identify possible unfollowing activity.
+
+\- Activity Tracker
+
+- Review publicly observable account activity.
+- Monitor profile changes through repeated checks.
+
+\- Story Viewer
+
+- Access the associated Instagram Story viewer.
+
+\- Profile Lookup
+
+- Enter a public Instagram username.
+- Paste an Instagram profile URL.
+- Review a free preview.
+- Unlock a fuller lookup through membership.
+
+\- Research Snapshot
+
+- Display available profile signals.
+- Review following counts.
+- Review visible connection information.
+- Compare repeat checks over time.
+
+\- Membership
+
+- Free preview.
+- Paid full lookup.
+- Membership-based access to additional information.
+
+\- Additional Use Cases
+
+- Personal research.
+- Competitor research.
+- Influencer discovery.
+- Audience analysis.
+- Partnership research.
+
+### How it works
+
+1. Enter a public username or profile URL.
+2. Review the free profile preview.
+3. Examine publicly visible profile signals.
+4. Use membership to access the full lookup.
+5. Repeat checks to compare following changes.
+
+An important feature of iFollowTracker is that it explicitly describes results as directional public-profile signals rather than an official Instagram audit log.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.ifollowtracker.com\&sz=32)
+
+iFollowTracker
+
++1
+
+
+
+## 11. IGStoryViewer.to — Instagram Story Viewer
+
+[Visor de Historias de Instagram — Historias anónimas, Reels y Destacados](https://images.openai.com/static-rsc-4/yIjCBAqFNrP4Uj_gdEHn40wXf9asnd4fbtcxXw7BAmSF3Q6x43t3ZZFLX7LsxMKHXdxE_qddJsEjygwDBuYTUCh2xxmJHwR321Y2eHJzu0YkXRXn96QKVdnEfI7vhvfbK6x2H-kMmqtbH0csPgp22EA3V51ub7XDASJhXiismcw?purpose=inline)
+
+Website: [igstoryviewer.to](https://igstoryviewer.to/en/?utm_source=chatgpt.com)
+
+Main category: Anonymous Story viewing and downloading.
+
+### Features and functionalities
+
+- Anonymous Instagram Story viewing.
+- Public profile lookup.
+- Search using a username.
+- Search using an Instagram profile URL.
+- Watch active Stories.
+- Download Stories in HD, according to the website.
+- No Instagram account required.
+- No Instagram login required.
+- Browser-based viewing.
+- No app installation required.
+- Mobile and desktop compatibility.
+- Public accounts only.
+- No advertised workaround for private accounts.
+- Privacy-focused browsing.
+- No account registration for the viewer.
+
+### Privacy-related features
+
+The website claims:
+
+- Searches are not stored.
+- IP addresses are not logged against searched profiles.
+- No account is required.
+- Search activity stays in the browser.
+
+These are the site's privacy claims, not independently audited guarantees.
+
+### How it works
+
+1. Enter a username or profile URL.
+2. The service retrieves available public Stories.
+3. Stories appear in its browser-based interface.
+4. Select a Story to view it.
+5. Download supported content.
+
+The website also states that content should only be saved when you own it or have permission to use it.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://igstoryviewer.to\&sz=32)
+
+IG Story Viewer
+
+
+
+## 12. Imginn — Instagram Stories Viewer
+
+[instagram story viewer anonymous & downloader - Imginn](https://images.openai.com/static-rsc-4/wLi98sHbik-bNz1Lz7RLEDXnU21v24_5IDwehWYnBXa5IwcuOvK7NGnub1kHZjnTCbziqZBKLqa5K9pydBfKneVWx-Bgtdtjk2SqmljfLCJwtQhrYnDEq9y0UIX1lPHG48yvELfAFanmawWoNe-x7fkCEDHI-dQz-2C67VsarsE?purpose=inline)
+
+Website: [imginn.com/stories/](https://imginn.com/stories/?utm_source=chatgpt.com)
+
+Main category: Instagram content browsing.
+
+### Features and functionalities to investigate
+
+Imginn is associated with third-party Instagram content-viewing functionality. However, its supplied Stories URL returned an internal access error during this review, so I cannot confirm the current operation of every feature.
+
+The relevant functionality to check when testing the live website includes:
+
+- Public Instagram profile searching.
+- Profile information viewing.
+- Public post browsing.
+- Photo viewing.
+- Video viewing.
+- Story browsing, if currently supported.
+- Profile picture viewing.
+- Username-based lookup.
+- Media downloading, if available.
+- Browser-based access.
+- No-login public browsing, if available.
+
+Verification warning: Do not treat these as confirmed currently working features. The live endpoint could not be inspected, and I would not recommend depending on Imginn until it passes a manual functionality and safety test.
+
+## 13. UnfollowCheck — Instagram Unfollow Checker
+
+[See Who Someone Recently Followed on Instagram — Free Tracker | UnfollowCheck](https://images.openai.com/static-rsc-4/FchLnw71O6AEm0oIAPTHhwyqfDVQr9TXDYWsl4vqd0g1yQ9nJK9vGn8gk_trS00OaHUOXgPBCKEjxab8JJz0RCD838e2CNVfUKS35oZGT68f0IBTm-mnrVGD6wWEf4C61-LfxtJ09-YQBwNtGUDQZv1Vo6xJGqxg40hohp-MkPw?purpose=inline)
+
+Website: [unfollowcheck.com](https://unfollowcheck.com/scan/?utm_source=chatgpt.com)
+
+Main category: Unfollow and follower relationship checking.
+
+### Main functionality
+
+Its URL identifies it as an Instagram scanning/unfollow-checking service. The supplied endpoint returned an internal access error, so the current workflow and complete feature set could not be independently verified.
+
+Relevant functionality to investigate:
+
+- Identify accounts that no longer follow you.
+- Compare followers and following.
+- Identify non-mutual following relationships.
+- Detect missing follower relationships.
+- Compare account lists.
+- Scan Instagram follower information.
+- Display accounts that you follow but that do not follow you back.
+- Potentially provide downloadable scan results.
+- Potentially maintain historical scan results.
+
+Important: There are two very different functions:
+
+1. Unfollowers: People who previously followed you and subsequently stopped.
+2. Not following back: People you follow who do not currently follow you.
+
+A good application should implement these as separate modules.
+
+## 14. AnonyIG / IgAnony — Anonymous Instagram Viewer
+
+[偷看IG限動不被發現！6大「匿名偷看IG限時動態」方法，教你成為限時動態的隱形人](https://images.openai.com/static-rsc-4/CBPa8JtdjqwvtY0oRpvIZPbZPu82LgUSiAgVVlug_oXu4wSFPvBadi6KyXiWykyUaCk3ut2NmKOeUyk2XlAf1DFLlrzKlttmrAMy5qbwU_3CJ7C0swRPKGMRLfS3UM9ecOhzlZXehcnE_E-_BUk54noS9tiVHLAbvvIwh3Z-SSY?purpose=inline)
+
+Website: [anonyig.com](https://anonyig.com/en1/iganony/?utm_source=chatgpt.com)
+
+Main category: Anonymous Story viewing and downloading.
+
+### Features and functionalities
+
+\- Anonymous Browsing
+
+- View available public Instagram Stories anonymously.
+- Browse without Instagram login.
+- No account registration required for the advertised viewer.
+
+\- Story Viewer
+
+- Search for a public Instagram profile.
+- Browse available Stories.
+- View photos and videos.
+- Select specific Stories.
+
+\- Highlights Viewer
+
+- Access public Highlights.
+- Browse saved Story collections.
+
+\- Content Downloader
+
+- Download Story photos.
+- Download Story videos.
+- Save available profile media.
+- Download supported content to your device.
+
+\- Public Profile Search
+
+- Enter usernames.
+- Enter profile URLs.
+- Search for public Instagram accounts.
+
+\- Device Compatibility
+
+- Smartphones.
+- Tablets.
+- Desktop computers.
+- Browser-based access.
+
+\- No Login
+
+- No Instagram credentials required for public content.
+
+### Limitations
+
+- Cannot access private accounts.
+- Cannot retrieve Stories that have already been deleted.
+- Depends on available public content.
+- Availability and quality depend on the source.
+
+### How it works
+
+1. Open Instagram and copy a public profile username or URL.
+2. Open AnonyIG.
+3. Enter the username or URL.
+4. Select Stories, Highlights or another available section.
+5. Browse or download supported media.
+
+The website explicitly lists anonymous browsing, no account requirement, photo/video downloading, free access and private-account limitations.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://anonyig.com\&sz=32)
+
+AnonyIG
+
++1
+
+
+
+## 15. Pixnoy — Instagram Viewer
+
+[Cyber Detective💙💛 (@cyb_detective) on X](https://images.openai.com/static-rsc-4/rGdGR3H6RKIhObLLiN4RKgvJ-vzt0Y3szwwVzWpfolZFdpOARt-683wPlB4K4tmTZPwAiYzKXXtg-wYmAOzdINfEN6D7o5nJDIzEQQdp4cL8u2_Jq_EjjPf2hhQu8FSfRELwQw95zFsIwGoYo9afPiYSKU3NE9ROWHIDltRrFT4?purpose=inline)
+
+Website: [pixnoy.com](https://www.pixnoy.com?utm_source=chatgpt.com)
+
+Main category: Third-party Instagram browsing.
+
+### Functionality to investigate
+
+The supplied website could not be inspected successfully during this review. I therefore cannot certify its current features.
+
+For a proper feature audit, check:
+
+- Instagram profile viewer.
+- Public posts viewer.
+- Photo gallery.
+- Video viewer.
+- Reels viewer.
+- Stories viewer.
+- Highlights viewer.
+- Profile picture viewer.
+- Username search.
+- Media download options.
+- Anonymous public browsing.
+- Mobile browser support.
+- Profile information display.
+
+These are verification targets, not confirmed features of the current Pixnoy service.
+
+## 16. StorySaver.net — Instagram Story and Highlights Downloader
+
+[Top 4 Free Instagram Story Downloaders (No Login Needed) | Toolsmart Blog](https://images.openai.com/static-rsc-4/Imq2y1hPltv68TylIHo16O2TJIV6AfjSI3VSyCBpFmA7VsDorB5lBiUH2Uf2sct3CLOF2qHjIqyyzZQcWdZvhE_6GqGsdNy74QTPkupDFqIsnJqFPGtyTyXl1xWl13kCX-O0zwpiePGm2FLh_L54E7lqyrJSLn2eWPtdvyUTQr0?purpose=inline)
+
+Website: [storysaver.net](https://www.storysaver.net/en?utm_source=chatgpt.com)
+
+Main category: Story and Highlights downloading.
+
+### Features and functionalities
+
+\- Instagram Story Downloader
+
+- Enter an Instagram username.
+- Retrieve currently available public Stories.
+- Display available Story media.
+- Download Story photos.
+- Download Story videos.
+- Save media to a computer or mobile device.
+
+\- Instagram Highlights Downloader
+
+- Search for a public Instagram profile.
+- Retrieve available Highlight albums.
+- Display Highlight collections.
+- Open a specific Highlight album.
+- Browse individual Stories inside an album.
+- Download individual Highlight photos.
+- Download individual Highlight videos.
+
+\- Instagram Video Downloader
+
+- Access its separate video-downloading tool.
+
+\- Username Search
+
+- Enter an Instagram username.
+- Enter a supported Instagram video URL.
+
+\- Browser-Based Functionality
+
+- No app installation required.
+- Works through a browser.
+- Download content to your device.
+
+### How it works
+
+1. Enter the Instagram username.
+2. Select Download.
+3. The website displays available Stories and Highlights.
+4. Open the desired Story or Highlight album.
+5. Select the download link under the media.
+6. Save the content to your device.
+
+### Limitations
+
+- The account must be public.
+- Only currently accessible Stories can be retrieved.
+- Deleted or expired Stories are not guaranteed to be available.
+
+StorySaver explicitly documents this username-to-Stories-to-download workflow on its website.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.storysaver.net\&sz=32)
+
+StorySaver
+
+
+
+## 17. InSnoop — Anonymous Instagram Story Viewer
+
+[What Is Insnoop? Complete Guide to Anonymous Instagram Story Viewing](https://images.openai.com/static-rsc-4/J4BxI1USrvbrG3fL7hSS2Qm8GsD3db27pEsw6QBM4AITlwIINPmPuZRQFQnW_KtVyBBJYbj7tdL7SKtUstJtQ3HJAPo84lE5yb6Fl-pukwON9P3lpYJi9EwFQ6EpMbSFgoR0a4mJxK3yOUjLjVnreRiCw_ZN4nZ9V1z8W0rQgDI?purpose=inline)
+
+Website: [insnoop.com](https://insnoop.com/?utm_source=chatgpt.com)
+
+Main category: Anonymous Stories and Story monitoring.
+
+### Features and functionalities
+
+\- Anonymous Story Viewer
+
+- Search public Instagram profiles.
+- View available Stories.
+- Browse Stories without appearing in the Instagram viewer list, according to its claim.
+- No Instagram login required for the advertised functionality.
+
+\- Story Timestamps
+
+- Review Stories with associated timestamps.
+- Identify when available Story content was published.
+
+\- Saved Stories and Highlights
+
+- Access saved public Story content where available.
+- Browse Highlights and other clips.
+
+\- Popular Account Discovery
+
+- Explore popular Instagram accounts.
+- Browse accounts displayed in categories.
+- Discover profiles through its homepage.
+
+\- Competitor Research
+
+- Monitor publicly available competitor Stories.
+- Review public account updates.
+- Research content and activity.
+
+\- User Interface
+
+- Profile search.
+- Username lookup.
+- Story browsing.
+- Featured/popular account listings.
+
+\- No Login
+
+- No Instagram credentials needed for the advertised public Story viewer.
+
+### How it works
+
+1. Copy a public Instagram username or profile URL.
+2. Enter it in InSnoop.
+3. Search for the account.
+4. Open available Stories.
+5. Browse the content through its interface.
+
+InSnoop specifically advertises live Story checking, timestamps, competitor monitoring and anonymous viewing.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://insnoop.com\&sz=32)
+
+InSnoop
+
++1
+
+
+
+# 18. How these websites work technically
+
+This is probably the most important part if you want to understand how all these tools operate or eventually build your own Instagram viewer.
+
+Most of the anonymous viewers use a similar architecture, although their implementations, data sources and reliability differ.
+
+## A. Anonymous Instagram viewing architecture
+
+[Anonymous Story Viewer Instagram: Cara Kerjanya & Cara Memilih yang Aman (2026)](https://images.openai.com/static-rsc-4/W55bw_ZI5hZIj8_pUbFy3dzh6_hXXpTfibNQakhqmh-HHYrGB571VaL5-hs8UoYLXZLc7X2FdowInzvoAHvzSTIbECPqsHPxyGb0ei1YFJbVx8M2YwcqAAV4VN-YIE1zsJz8epo3vULQAuFYEbLv7P3G-RvkZVcZQqO1fbzy8qs?purpose=inline)
+
+[igexport.com](https://igexport.com/id/anonymous-instagram-story-viewer/?utm_source=chatgpt.com)
+
+The general architecture looks like this:
+
+\#chatgpt-mermaid-\_r_244\_{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;fill:rgb(13, 13, 13);}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#chatgpt-mermaid-\_r_244\_ .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-\_r_244\_ .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-\_r_244\_ .error-icon{fill:rgb(243, 243, 243);}#chatgpt-mermaid-\_r_244\_ .error-text{fill:rgb(13, 13, 13);stroke:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ .edge-thickness-normal{stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ .edge-thickness-thick{stroke-width:3.5px;}#chatgpt-mermaid-\_r_244\_ .edge-pattern-solid{stroke-dasharray:0;}#chatgpt-mermaid-\_r_244\_ .edge-thickness-invisible{stroke-width:0;fill:none;}#chatgpt-mermaid-\_r_244\_ .edge-pattern-dashed{stroke-dasharray:3;}#chatgpt-mermaid-\_r_244\_ .edge-pattern-dotted{stroke-dasharray:2;}#chatgpt-mermaid-\_r_244\_ .marker{fill:rgb(143, 143, 143);stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_244\_ .marker.cross{stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_244\_ svg{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;}#chatgpt-mermaid-\_r_244\_ p{margin:0;}#chatgpt-mermaid-\_r_244\_ .label{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ .cluster-label text{fill:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ .cluster-label span{color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ .cluster-label span p{background-color:transparent;}#chatgpt-mermaid-\_r_244\_ .label text,#chatgpt-mermaid-\_r_244\_ span{fill:rgb(13, 13, 13);color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ .node rect,#chatgpt-mermaid-\_r_244\_ .node circle,#chatgpt-mermaid-\_r_244\_ .node ellipse,#chatgpt-mermaid-\_r_244\_ .node polygon,#chatgpt-mermaid-\_r_244\_ .node path{fill:rgb(222, 234, 251);stroke:rgb(83, 154, 248);stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ .rough-node .label text,#chatgpt-mermaid-\_r_244\_ .node .label text,#chatgpt-mermaid-\_r_244\_ .image-shape .label,#chatgpt-mermaid-\_r_244\_ .icon-shape .label{text-anchor:middle;}#chatgpt-mermaid-\_r_244\_ .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ .rough-node .label,#chatgpt-mermaid-\_r_244\_ .node .label,#chatgpt-mermaid-\_r_244\_ .image-shape .label,#chatgpt-mermaid-\_r_244\_ .icon-shape .label{text-align:center;}#chatgpt-mermaid-\_r_244\_ .node.clickable{cursor:pointer;}#chatgpt-mermaid-\_r_244\_ .root .anchor path{fill:rgb(143, 143, 143)!important;stroke-width:0;stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_244\_ .arrowheadPath{fill:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_244\_ .edgePath .path{stroke:rgb(143, 143, 143);stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ .flowchart-link{stroke:rgb(143, 143, 143);fill:none;}#chatgpt-mermaid-\_r_244\_ .edgeLabel{background-color:rgb(252, 252, 252);text-align:center;}#chatgpt-mermaid-\_r_244\_ .edgeLabel p{background-color:rgb(252, 252, 252);}#chatgpt-mermaid-\_r_244\_ .edgeLabel rect{opacity:0.5;background-color:rgb(252, 252, 252);fill:rgb(252, 252, 252);}#chatgpt-mermaid-\_r_244\_ .labelBkg{background-color:rgba(252, 252, 252, 0.5);}#chatgpt-mermaid-\_r_244\_ .cluster rect{fill:rgb(243, 243, 243);stroke:rgba(0, 0, 0, 0.1);stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ .cluster text{fill:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ .cluster span{color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:12px;background:rgb(243, 243, 243);border:1px solid rgba(0, 0, 0, 0.1);border-radius:2px;pointer-events:none;z-index:100;}#chatgpt-mermaid-\_r_244\_ .flowchartTitleText{text-anchor:middle;font-size:18px;fill:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_244\_ rect.text{fill:none;stroke-width:0;}#chatgpt-mermaid-\_r_244\_ .icon-shape,#chatgpt-mermaid-\_r_244\_ .image-shape{background-color:rgb(252, 252, 252);text-align:center;}#chatgpt-mermaid-\_r_244\_ .icon-shape p,#chatgpt-mermaid-\_r_244\_ .image-shape p{background-color:rgb(252, 252, 252);padding:2px;}#chatgpt-mermaid-\_r_244\_ .icon-shape .label rect,#chatgpt-mermaid-\_r_244\_ .image-shape .label rect{opacity:0.5;background-color:rgb(252, 252, 252);fill:rgb(252, 252, 252);}#chatgpt-mermaid-\_r_244\_ .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#chatgpt-mermaid-\_r_244\_ .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#chatgpt-mermaid-\_r_244\_ .node .neo-node{stroke:rgb(83, 154, 248);}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].node rect,#chatgpt-mermaid-\_r_244\_ [data-look="neo"].cluster rect,#chatgpt-mermaid-\_r_244\_ [data-look="neo"].node polygon{stroke:url(#chatgpt-mermaid-\_r_244\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].swimlane.cluster rect{filter:none;}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].node path{stroke:url(#chatgpt-mermaid-\_r_244\_-gradient);stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].node .neo-line path{stroke:rgb(83, 154, 248);filter:none;}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].node circle{stroke:url(#chatgpt-mermaid-\_r_244\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].node circle .state-start{fill:#000000;}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].icon-shape .icon{fill:url(#chatgpt-mermaid-\_r_244\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_244\_ [data-look="neo"].icon-shape .icon-neo path{stroke:url(#chatgpt-mermaid-\_r_244\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_244\_ .node text{font-size:14px;font-weight:600;letter-spacing:normal;fill:rgb(0, 79, 153);}#chatgpt-mermaid-\_r_244\_ .edgeLabels text{font-size:13px;font-weight:600;letter-spacing:-0.08px;fill:rgb(0, 79, 153);}#chatgpt-mermaid-\_r_244\_ .node tspan[font-weight="normal"],#chatgpt-mermaid-\_r_244\_ .edgeLabels tspan[font-weight="normal"]{font-weight:600;}#chatgpt-mermaid-\_r_244\_ .edgeLabel .label rect{opacity:1;rx:13px;ry:13px;fill:rgb(245, 250, 255);stroke:rgb(206, 219, 229);stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ .node rect,#chatgpt-mermaid-\_r_244\_ .node circle,#chatgpt-mermaid-\_r_244\_ .node ellipse,#chatgpt-mermaid-\_r_244\_ .node polygon,#chatgpt-mermaid-\_r_244\_ .node path{fill:rgb(229, 243, 255);stroke:rgba(0, 0, 0, 0.1);stroke-width:1px;}#chatgpt-mermaid-\_r_244\_ .node rect{rx:16px;ry:16px;}#chatgpt-mermaid-\_r_244\_ .node.mermaid-decision .label-container{fill:rgb(245, 250, 255);stroke:rgb(206, 219, 229);stroke-dasharray:2,2;}#chatgpt-mermaid-\_r_244\_ .edgePaths .flowchart-link{stroke:rgb(143, 143, 143);stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;}#chatgpt-mermaid-\_r_244\_ .marker{fill:rgb(143, 143, 143);stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_244\_ :root{--mermaid-font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";}User opens viewer websiteEnter Instagram usernameFrontend sends lookup requestBackend APIInstagram public data retrievalData available?Parse profile and mediainformationReturn unavailable or errorCache resultsReturn JSON to frontendDisplay Stories and PostsOptional media downloadYesNo
+
+### Step-by-step explanation
+
+1\. Frontend
+
+- User enters an Instagram username.
+- The application validates the username.
+- The frontend sends a request to its backend.
+- Results are displayed in a profile viewer.
+
+2\. Backend
+
+- Receives the username.
+- Checks whether cached information exists.
+- Attempts to retrieve accessible public information.
+- Processes the response.
+- Extracts available profile and media information.
+
+3\. Data extraction
+
+Depending on the service's implementation, it might use:
+
+- Publicly accessible Instagram web pages.
+- Public profile information.
+- Public media endpoints where accessible.
+- Server-side HTTP requests.
+- Third-party data providers.
+- Previously collected profile snapshots.
+- Cached media and metadata.
+
+4\. Media processing
+
+- Extracts image URLs.
+- Extracts video URLs.
+- Processes available Story information.
+- Retrieves available thumbnails.
+- Prepares downloadable media.
+
+5\. Frontend rendering
+
+- Displays the account profile.
+- Displays Story thumbnails.
+- Displays media previews.
+- Provides download controls.
+
+This architecture is a general technical model, not a verified description of the internal code of each website.
+
+## B. How anonymous Story viewing works
+
+[Instagram Story Viewer - Anonymous IG Story Viewer | XXStory](https://images.openai.com/static-rsc-4/BOnK2eGAX35qF3SOQWBs-QD4iDqt9Ab-_XNELpWkD6q5c5_89xeH4q-KF3fuO3J1Tj70BaESgqk_gVxVjYISh-_xjAEu8WcRJedpVanT2LEB6vmJfTncw4KQscY_4KwgZ9919El2nYtrZ94Yl-5AsuRtw5_Rq9Dp7r809eMBvek?purpose=inline)
+
+[xxstory.net](https://www.xxstory.net/?utm_source=chatgpt.com)
+
+The important difference is that your browser does not open the Story through your personal Instagram account.
+
+For example:
+
+Normal Instagram viewing:
+
+1. Log in to Instagram.
+2. Open someone's Story.
+3. Instagram associates the Story view with your account.
+4. Your username can appear in the owner's Story viewer list.
+
+Third-party anonymous viewing:
+
+1. Open an anonymous viewer.
+2. Enter a public username.
+3. Its backend attempts to retrieve the publicly available Story.
+4. Its website displays the media.
+5. Your personal Instagram account is not used to register that view.
+
+This is why the person generally cannot identify you through Instagram's ordinary Story viewer list when a genuinely anonymous, server-side public viewer works as advertised.
+
+However:
+
+- The third-party service may log your IP address.
+- The website may store search activity.
+- Instagram can change its access restrictions.
+- Some services may use third-party data providers.
+- Not every service guarantees that the content can be retrieved.
+- Anonymous viewing is not equivalent to complete internet anonymity.
+
+## C. How recent-following trackers work
+
+This is technically different from Story viewing.
+
+A recent-following tracker needs to compare information collected at different times.
+
+\#chatgpt-mermaid-\_r_24g\_{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;fill:rgb(13, 13, 13);}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#chatgpt-mermaid-\_r_24g\_ .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-\_r_24g\_ .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-\_r_24g\_ .error-icon{fill:rgb(243, 243, 243);}#chatgpt-mermaid-\_r_24g\_ .error-text{fill:rgb(13, 13, 13);stroke:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ .edge-thickness-normal{stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ .edge-thickness-thick{stroke-width:3.5px;}#chatgpt-mermaid-\_r_24g\_ .edge-pattern-solid{stroke-dasharray:0;}#chatgpt-mermaid-\_r_24g\_ .edge-thickness-invisible{stroke-width:0;fill:none;}#chatgpt-mermaid-\_r_24g\_ .edge-pattern-dashed{stroke-dasharray:3;}#chatgpt-mermaid-\_r_24g\_ .edge-pattern-dotted{stroke-dasharray:2;}#chatgpt-mermaid-\_r_24g\_ .marker{fill:rgb(143, 143, 143);stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_24g\_ .marker.cross{stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_24g\_ svg{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;}#chatgpt-mermaid-\_r_24g\_ p{margin:0;}#chatgpt-mermaid-\_r_24g\_ .label{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ .cluster-label text{fill:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ .cluster-label span{color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ .cluster-label span p{background-color:transparent;}#chatgpt-mermaid-\_r_24g\_ .label text,#chatgpt-mermaid-\_r_24g\_ span{fill:rgb(13, 13, 13);color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ .node rect,#chatgpt-mermaid-\_r_24g\_ .node circle,#chatgpt-mermaid-\_r_24g\_ .node ellipse,#chatgpt-mermaid-\_r_24g\_ .node polygon,#chatgpt-mermaid-\_r_24g\_ .node path{fill:rgb(222, 234, 251);stroke:rgb(83, 154, 248);stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ .rough-node .label text,#chatgpt-mermaid-\_r_24g\_ .node .label text,#chatgpt-mermaid-\_r_24g\_ .image-shape .label,#chatgpt-mermaid-\_r_24g\_ .icon-shape .label{text-anchor:middle;}#chatgpt-mermaid-\_r_24g\_ .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ .rough-node .label,#chatgpt-mermaid-\_r_24g\_ .node .label,#chatgpt-mermaid-\_r_24g\_ .image-shape .label,#chatgpt-mermaid-\_r_24g\_ .icon-shape .label{text-align:center;}#chatgpt-mermaid-\_r_24g\_ .node.clickable{cursor:pointer;}#chatgpt-mermaid-\_r_24g\_ .root .anchor path{fill:rgb(143, 143, 143)!important;stroke-width:0;stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_24g\_ .arrowheadPath{fill:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_24g\_ .edgePath .path{stroke:rgb(143, 143, 143);stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ .flowchart-link{stroke:rgb(143, 143, 143);fill:none;}#chatgpt-mermaid-\_r_24g\_ .edgeLabel{background-color:rgb(252, 252, 252);text-align:center;}#chatgpt-mermaid-\_r_24g\_ .edgeLabel p{background-color:rgb(252, 252, 252);}#chatgpt-mermaid-\_r_24g\_ .edgeLabel rect{opacity:0.5;background-color:rgb(252, 252, 252);fill:rgb(252, 252, 252);}#chatgpt-mermaid-\_r_24g\_ .labelBkg{background-color:rgba(252, 252, 252, 0.5);}#chatgpt-mermaid-\_r_24g\_ .cluster rect{fill:rgb(243, 243, 243);stroke:rgba(0, 0, 0, 0.1);stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ .cluster text{fill:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ .cluster span{color:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:12px;background:rgb(243, 243, 243);border:1px solid rgba(0, 0, 0, 0.1);border-radius:2px;pointer-events:none;z-index:100;}#chatgpt-mermaid-\_r_24g\_ .flowchartTitleText{text-anchor:middle;font-size:18px;fill:rgb(13, 13, 13);}#chatgpt-mermaid-\_r_24g\_ rect.text{fill:none;stroke-width:0;}#chatgpt-mermaid-\_r_24g\_ .icon-shape,#chatgpt-mermaid-\_r_24g\_ .image-shape{background-color:rgb(252, 252, 252);text-align:center;}#chatgpt-mermaid-\_r_24g\_ .icon-shape p,#chatgpt-mermaid-\_r_24g\_ .image-shape p{background-color:rgb(252, 252, 252);padding:2px;}#chatgpt-mermaid-\_r_24g\_ .icon-shape .label rect,#chatgpt-mermaid-\_r_24g\_ .image-shape .label rect{opacity:0.5;background-color:rgb(252, 252, 252);fill:rgb(252, 252, 252);}#chatgpt-mermaid-\_r_24g\_ .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#chatgpt-mermaid-\_r_24g\_ .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#chatgpt-mermaid-\_r_24g\_ .node .neo-node{stroke:rgb(83, 154, 248);}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].node rect,#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].cluster rect,#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].node polygon{stroke:url(#chatgpt-mermaid-\_r_24g\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].swimlane.cluster rect{filter:none;}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].node path{stroke:url(#chatgpt-mermaid-\_r_24g\_-gradient);stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].node .neo-line path{stroke:rgb(83, 154, 248);filter:none;}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].node circle{stroke:url(#chatgpt-mermaid-\_r_24g\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].node circle .state-start{fill:#000000;}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].icon-shape .icon{fill:url(#chatgpt-mermaid-\_r_24g\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_24g\_ [data-look="neo"].icon-shape .icon-neo path{stroke:url(#chatgpt-mermaid-\_r_24g\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_24g\_ .node text{font-size:14px;font-weight:600;letter-spacing:normal;fill:rgb(0, 79, 153);}#chatgpt-mermaid-\_r_24g\_ .edgeLabels text{font-size:13px;font-weight:600;letter-spacing:-0.08px;fill:rgb(0, 79, 153);}#chatgpt-mermaid-\_r_24g\_ .node tspan[font-weight="normal"],#chatgpt-mermaid-\_r_24g\_ .edgeLabels tspan[font-weight="normal"]{font-weight:600;}#chatgpt-mermaid-\_r_24g\_ .edgeLabel .label rect{opacity:1;rx:13px;ry:13px;fill:rgb(245, 250, 255);stroke:rgb(206, 219, 229);stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ .node rect,#chatgpt-mermaid-\_r_24g\_ .node circle,#chatgpt-mermaid-\_r_24g\_ .node ellipse,#chatgpt-mermaid-\_r_24g\_ .node polygon,#chatgpt-mermaid-\_r_24g\_ .node path{fill:rgb(229, 243, 255);stroke:rgba(0, 0, 0, 0.1);stroke-width:1px;}#chatgpt-mermaid-\_r_24g\_ .node rect{rx:16px;ry:16px;}#chatgpt-mermaid-\_r_24g\_ .node.mermaid-decision .label-container{fill:rgb(245, 250, 255);stroke:rgb(206, 219, 229);stroke-dasharray:2,2;}#chatgpt-mermaid-\_r_24g\_ .edgePaths .flowchart-link{stroke:rgb(143, 143, 143);stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;}#chatgpt-mermaid-\_r_24g\_ .marker{fill:rgb(143, 143, 143);stroke:rgb(143, 143, 143);}#chatgpt-mermaid-\_r_24g\_ :root{--mermaid-font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";}Enter public InstagramusernameRetrieve available Following listSave initial snapshotSchedule another lookupRetrieve updated Following listCompare snapshotsAny changes?Record new followingRecord removed connectionNo new eventUpdate activity timelineNew accountMissing accountNo changes
+
+### Example
+
+Suppose a public account follows these three accounts initially:
+
+| Initial snapshot | Following  |
+| ---------------- | ---------- |
+| 10:00 AM         | @account_a |
+| 10:00 AM         | @account_b |
+| 10:00 AM         | @account_c |
+
+Later, the tracker retrieves:
+
+| Updated snapshot | Following  |
+| ---------------- | ---------- |
+| 11:00 AM         | @account_a |
+| 11:00 AM         | @account_b |
+| 11:00 AM         | @account_c |
+| 11:00 AM         | @account_d |
+
+The tracker compares the two snapshots.
+
+Detected change
+
+Newly observed following: @account_d
+
+The tracker can record the time it detected this change.
+
+Important technical limitation: It cannot necessarily establish the exact time the account followed @account_d. If someone followed and unfollowed an account between two checks, the tracker might never detect it.
+
+# 19. Comparison of all 17 tools
+
+This table compares their primary advertised purposes, not independently tested performance.
+
+| Tool                  | Primary functionality            | Anonymous viewing          | Tracking                  |
+| --------------------- | -------------------------------- | -------------------------- | ------------------------- |
+| IGExport              | Stories and downloads            | Yes                        | Recent follows via app    |
+| Inflact               | Profile viewer and analytics     | Yes                        | Yes                       |
+| Save-Free             | Profile and media viewer         | Advertised                 | Not verified              |
+| Insta-Stories         | Story viewer                     | Yes                        | Not verified              |
+| PVStory               | Stories and followers            | Yes                        | Yes                       |
+| Dolphin Radar Story   | Stories and media                | Yes                        | Separate tracker          |
+| Dolphin Radar Tracker | Recent follows                   | Yes                        | Yes                       |
+| Recently Followed     | Recent follows                   | Yes                        | Yes                       |
+| FollowSpy             | Followers and unfollowers        | Yes                        | Yes                       |
+| iFollowTracker        | Activity tracking                | Public lookup              | Yes                       |
+| IGStoryViewer         | Stories and downloads            | Yes                        | No verified tracker       |
+| Imginn                | Instagram viewer                 | Not verified               | Not verified              |
+| UnfollowCheck         | Unfollow checking                | Not verified               | Unfollow checking purpose |
+| AnonyIG               | Stories and downloads            | Yes                        | No verified tracker       |
+| Pixnoy                | Instagram viewer                 | Not verified               | Not verified              |
+| StorySaver            | Stories and Highlights downloads | No-login download workflow | No verified tracker       |
+| InSnoop               | Story viewing and timestamps     | Yes                        | Story monitoring purpose  |
+
+## 20. Important differences between these tools
+
+There are five different types of functionality in your collection.
+
+Type 1 — Anonymous Instagram Viewer
+
+Examples: Inflact, Insta-Stories, IGStoryViewer, AnonyIG, InSnoop.
+
+Purpose: Browse public Instagram content without using your personal Instagram identity.
+
+Type 2 — Instagram Media Downloader
+
+Examples: IGExport, StorySaver, Save-Free.
+
+Purpose: Save available Stories, Highlights, photos, videos and Reels.
+
+Type 3 — Followers and Following Tracker
+
+Examples: Dolphin Radar, Recently Followed, FollowSpy, iFollowTracker.
+
+Purpose: Identify new followers, recent following connections and relationship changes.
+
+Type 4 — Unfollow Checker
+
+Examples: UnfollowCheck, FollowSpy and Dolphin Radar's Unfollow tool.
+
+Purpose: Identify missing follower relationships and accounts that have unfollowed.
+
+Type 5 — Instagram Research and Analytics
+
+Examples: Inflact, PVStory and Dolphin Radar.
+
+Purpose: Research public accounts, content, engagement, mentions and activity.
+
+# 21. Can you view a public Instagram account without logging in?
+
+Yes, with some limitations.
+
+There are three different situations worth understanding.
+
+| Activity                                                    | Does Instagram identify you?                  |
+| ----------------------------------------------------------- | --------------------------------------------- |
+| Open a public profile using an anonymous third-party viewer | Generally not as an Instagram account visitor |
+| View a public post through a third-party viewer             | Generally no personal viewer identity         |
+| View a Story through a genuine anonymous server-side viewer | Your personal account generally won't appear  |
+| Visit a profile while logged into Instagram                 | Profile visits generally aren't disclosed     |
+| Like a post                                                 | Your account can be identified                |
+| Comment on a post                                           | Your account can be identified                |
+| Follow someone                                              | Your account is associated with the follow    |
+| Send a DM                                                   | Your account is identified                    |
+
+### What if you want to follow someone without them knowing?
+
+This is an important distinction.
+
+- Browsing someone's public profile does not automatically follow them.
+- Viewing their public posts does not automatically create a follow relationship.
+- Using an anonymous viewer does not make an actual Instagram follow anonymous.
+- If you press Follow while logged in, the relationship is associated with your account.
+- Instagram may notify the other person about a new follower.
+- Their follower list can also show your account.
+
+Therefore, anonymous viewing and anonymous following are two completely different things. These third-party viewers do not provide a legitimate way to secretly establish a follow relationship.
+
+### What about private accounts?
+
+None of these public-viewing services should be considered a legitimate private-account bypass.
+
+If an account is private, you need the owner's approval to see its private content.
+
+Be especially careful with any website claiming that you can access any private Instagram account simply by entering its username.
+
+# 22. Security and privacy precautions
+
+Before using these websites, I recommend checking the following:
+
+- Never provide your Instagram password to an anonymous Story viewer.
+- Avoid services requesting Instagram session cookies.
+- Avoid downloading unknown browser extensions.
+- Do not install suspicious APK files.
+- Avoid websites that require completing surveys to unlock a supposedly free download.
+- Check the website's privacy policy.
+- Check whether search history is stored.
+- Check whether downloaded files contain unwanted executable content.
+- Avoid assuming that a website's 100% anonymous marketing claim is independently verified.
+- Respect copyright and the original creator's content.
+
+Also, Instagram's access mechanisms and restrictions can change. A service that works today might stop working tomorrow.
+
+# 23. Features worth combining into one Instagram research application
+
+Looking at all 17 websites together, there is a much bigger opportunity than simply building another Instagram Story downloader.
+
+You could combine their functionality into one modular application.
+
+Here is a proposed feature architecture:
+
+# Instagram Research Hub
+
+Unified public-profile research and monitoring platform
+
+Proposed application architecture
+
+Profile Viewer
+
+Bio, avatar, posts, public profile information.
+
+Anonymous Viewer
+
+Public Stories and Highlights.
+
+Media Downloader
+
+Photos, videos, Stories, Reels and Highlights.
+
+Follower Tracker
+
+Followers, following and new connections.
+
+Unfollow Checker
+
+Unfollowers and non-mutual connections.
+
+Activity Monitor
+
+Historical snapshots and detected changes.
+
+Profile Analytics
+
+Engagement and public content analysis.
+
+Account Discovery
+
+Search and organize public profiles.
+
+Additional platform modules
+
+- Search history and saved profiles.
+- Profile comparison.
+- Story archive for content you're authorized to retain.
+- Download manager.
+- Automatic monitoring schedules.
+- Change notifications.
+- CSV and JSON exports.
+- Dashboard and activity timelines.
+- Multi-profile management.
+- Data source health monitoring.
+- Privacy and retention controls.
+
+## Suggested application navigation
+
+```
+Instagram Research Hub
+│
+├── Dashboard
+│
+├── Instagram Viewer
+│   ├── Profile Viewer
+│   ├── Anonymous Story Viewer
+│   ├── Posts Viewer
+│   ├── Reels Viewer
+│   ├── Highlights Viewer
+│   └── Profile Picture Viewer
+│
+├── Instagram Downloader
+│   ├── Story Downloader
+│   ├── Highlights Downloader
+│   ├── Photo Downloader
+│   ├── Video Downloader
+│   └── Reels Downloader
+│
+├── Followers & Following
+│   ├── Followers Viewer
+│   ├── Following Viewer
+│   ├── Recent Followers
+│   ├── Recent Following
+│   ├── Following Changes
+│   ├── Unfollowers
+│   └── Not Following Back
+│
+├── Activity Monitoring
+│   ├── Profile Monitoring
+│   ├── Story Monitoring
+│   ├── Follower Changes
+│   ├── Following Changes
+│   └── Activity Timeline
+│
+├── Analytics
+│   ├── Profile Analyzer
+│   ├── Engagement Analysis
+│   ├── Post Analysis
+│   ├── Hashtag Research
+│   └── Profile Comparison
+│
+├── Saved Profiles
+├── Download History
+├── Export Center
+└── Settings
+```
+
+## 24. My recommended priorities
+
+If you want to build a similar application, I would prioritize the features this way:
+
+| Priority | Module                         | Reason                              |
+| -------- | ------------------------------ | ----------------------------------- |
+| 1        | Public Profile Viewer          | Foundation for other features       |
+| 2        | Story Viewer                   | One of the most common use cases    |
+| 3        | Story and Media Downloader     | Straightforward user workflow       |
+| 4        | Highlights Viewer              | Complements Story functionality     |
+| 5        | Followers and Following Viewer | Public relationship information     |
+| 6        | Recent Following Tracker       | Requires historical snapshots       |
+| 7        | Recent Followers Tracker       | Requires historical snapshots       |
+| 8        | Unfollow Checker               | Requires list comparison            |
+| 9        | Profile Monitoring             | Requires scheduling and persistence |
+| 10       | Profile Analytics              | More advanced processing            |
+
+My most important technical recommendation: Keep profile retrieval, Story retrieval, downloading, follower tracking and analytics as separate services. Use a shared data layer, caching, scheduled jobs and a common frontend.
+
+Do not build the whole system around a single Instagram scraping implementation. Instagram can change its website, restrict access, introduce rate limits or block retrieval methods. Your application should gracefully handle unavailable data rather than breaking all its modules.
+
+## 25. Final observations
+
+The most interesting tools in your list are:
+
+- IGExport: A broad Instagram toolkit with Story downloading, Highlights and additional utilities.
+- Inflact: A more comprehensive profile research and marketing platform.
+- Dolphin Radar: Particularly interesting for combining Stories, mentions, follower tracking and monitoring.
+- FollowSpy: Interesting for recent following, recent followers and unfollow detection.
+- iFollowTracker: Interesting for its modular approach to recent follows, followers, activity and changes.
+- PVStory: Interesting because it combines Story exploration, follower tracking and post insights.
+- InSnoop: Interesting for its Story-focused interface and timestamps.
+
+One final distinction matters: the advertised features of a website are not proof that every feature works consistently. I could inspect the current pages of most of your list, but Imginn, UnfollowCheck and Pixnoy did not provide accessible page content during this review. Their detailed functionality therefore remains unverified.
+
+For a development project, I would use these 17 tools as a feature-reference collection, then independently test each workflow before treating it as a confirmed requirement.
+
+-----
+# Github Repo Tools
+
+
+Yes. I found several GitHub projects that cover significant parts of your 17-tool collection. However, I haven't found one verified, completely working, open-source GitHub project that combines every feature of IGExport, Inflact, Dolphin Radar, FollowSpy, StorySaver and the other services.
+
+There is an important distinction between:
+
+- A project whose interface works.
+- A project that retrieves real Instagram data.
+- A project that works without Instagram login.
+- A project that supports historical follower tracking.
+- A project that is actively maintained and works reliably against Instagram's changing restrictions.
+
+Below are the most relevant repositories I found, ranked by how closely they match your requirements.
+
+# 1. Best GitHub projects to investigate
+
+## 1. ig-anon-viewer — Anonymous Instagram Viewer
+
+[GitHub - prathmeshsoni/InstaCapture: An anonymous Instagram stories, posts, reels, IGTV videos, and profile pictures effortlessly. Supports cookie-based authentication for stories and allows downloading media without authentication for other types.](https://images.openai.com/static-rsc-4/Gt3FZicb6kGqk7cJfelnxe8LZea1I5TsUUvGkCqHK6XsFZgs_zCSA0eHvofBP__ipHkM4Mvr4OkpW3lrY4qZ_unMxieNTdIn6AQRQ4vrtL9fwd36OmsCPMDKFfl0fHMJhliF56IxUD81U2Ror4a01fVX4V3oL0ux_lERMdL2750?purpose=inline)
+
+Best match for anonymous viewing
+
+Repository: [GordonBai/ig-story-viewer](https://github.com/GordonBai/ig-story-viewer?utm_source=chatgpt.com)
+
+License: MIT
+
+Technology: Next.js, React, TypeScript, Tailwind CSS.
+
+This is particularly relevant because its advertised functionality combines profile browsing, Stories and downloading.
+
+Features:
+
+- Anonymous public Instagram profile viewing.
+- Anonymous Story viewing.
+- Public profile metadata.
+- Story viewer with full-screen interface.
+- Instagram-style Story progress bars.
+- Automatic Story progression.
+- Hold-to-pause.
+- Keyboard navigation.
+- Public post browsing.
+- Three-column post gallery.
+- Carousel support.
+- Video support.
+- Story downloading.
+- Post photo downloading.
+- Post video downloading.
+- Original-quality JPG and MP4 downloads where available.
+- Username search.
+- Profile URL parsing.
+- No Instagram login.
+- No user Instagram cookies.
+- Pluggable data providers.
+- Mock data provider.
+- RapidAPI provider.
+- Redis caching support.
+- In-memory caching fallback.
+- IP-based rate limiting.
+- Media proxy.
+- Download functionality.
+
+Architecture highlights:
+
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── profile/
+│   │   └── media/
+│   ├── u/[username]/
+│   └── page.tsx
+├── components/
+├── lib/
+│   ├── cache.ts
+│   └── instagram/
+│       ├── types.ts
+│       ├── mock.ts
+│       ├── rapidapi.ts
+│       └── index.ts
+```
+
+Important limitation: Its default provider uses mock data. To retrieve actual Instagram information, you need a functioning external data provider and API key. Therefore, installing it without configuration does not give you a fully functioning live Instagram viewer.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://github.com\&sz=32)
+
+GitHub
+
+
+
+## 2. Instagram Tools — React Native App
+
+[Michael Rubino - Software Engineer Manager | Angular, React, Full-Stack Developer](https://images.openai.com/static-rsc-4/9HPNd6JBLnl0ksnsvvmXWJe9oT0ndX2VMSf8Ix0qCmn21N5gjjsA_lpghcRgmQMnfnSSbtnl31JXIs3ZTFH13Y6jySKBZPokXVAqM3f5cz2k_Qsyg2JKwcgbJhYKMrlPOYsHBB8P8ScUPHb_aKGsJBeE1yqgQRu22QBNhc6EOMs?purpose=inline)
+
+Best combined downloader and unfollow checker
+
+Repository: [huseyinbozkurt/instagram-tools-RN-app](https://github.com/huseyinbozkurt/instagram-tools-RN-app?utm_source=chatgpt.com)
+
+Technology: React Native, Expo, TypeScript.
+
+Features:
+
+- Unfollowers checker.
+- Followers list retrieval.
+- Following list retrieval.
+- Non-followers detection.
+- Mutual followers identification.
+- Total followers statistics.
+- Total following statistics.
+- Search by username.
+- Search by full name.
+- Verified account indicators.
+- Private account indicators.
+- Local results caching.
+- Instagram post downloader.
+- Reels downloader.
+- Stories downloader.
+- Highlights downloader.
+- Carousel downloader.
+- Clipboard URL detection.
+- Media selection grid.
+- Full-screen media preview.
+- Video playback.
+- Local file downloading.
+- Device media library saving.
+- Request delays to reduce rate-limit problems.
+
+How its unfollower detection works:
+
+1. Retrieves your Following list.
+2. Retrieves your Followers list.
+3. Creates a set of follower IDs.
+4. Compares both lists.
+5. Displays accounts that you follow but that do not follow you back.
+
+Important limitation: This project uses Instagram's private API through an authenticated WebView. It is not a no-login anonymous viewer. It also has Android/iOS development requirements rather than being a ready-made public website.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://github.com\&sz=32)
+
+huseyinbozkurt/instagram-tools-RN-app · GitHub
+
+
+
+## 3. SafeUnfollow — Open-Source Unfollow Tracker
+
+[How to Use Instagram Unfollow Tracker — Complete Guide - Instagram Unfollow Tracker](https://images.openai.com/static-rsc-4/23pc9Fx1JcHuxmBk9Nwv92Z8riEuYYUL5DTUsQiha0xBNnjJFsAQa7bCf0Ih0-dgUH9EkKLOUEZDVY5_oFgqmIXDFJD9RGCBaC2PJHzkIltpr-PUzFdBQphNkR9-fh5oU63Al4BsjOwfqAEL4COfcftLQwP_oXeyg6rZwgOFFy4?purpose=inline)
+
+Best privacy-focused solution
+
+Repository: [ignromanov/safe-unfollow](https://github.com/ignromanov/safe-unfollow?utm_source=chatgpt.com)
+
+Live application: [safeunfollow.app](https://safeunfollow.app/?utm_source=chatgpt.com)
+
+License: MIT.
+
+Features:
+
+- Find people who unfollowed you.
+- Identify accounts that you follow but that do not follow you back.
+- Identify accounts that follow you but you do not follow back.
+- Identify mutual followers.
+- Analyze follower relationships.
+- Connection pattern analysis.
+- Local browser processing.
+- IndexedDB storage.
+- Instagram data ZIP import.
+- JSON export processing.
+- No Instagram password.
+- No Instagram login.
+- No need to provide cookies.
+- Large follower list processing.
+- Search and filter connections.
+- Privacy-focused processing.
+
+How it works:
+
+1. Request your Instagram information through Meta Accounts Center.
+2. Download your Followers and Following data.
+3. Upload the ZIP into SafeUnfollow.
+4. The browser extracts the data.
+5. It compares follower and following relationships.
+6. It produces categorized results.
+
+Important limitation: This is not an anonymous viewer for someone else's account. It analyzes your own exported Instagram data. It is particularly useful because it avoids handing your Instagram credentials to third-party tracking services.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://github.com\&sz=32)
+
+GitHub
+
+
+
+## 4. Insta-Followers-Track — Follower History Tracker
+
+[SeeWho - Instagram Follower Tracker – Get this Extension for 🦊 Firefox (en-US)](https://images.openai.com/static-rsc-4/N8MAFyGlp0lj73Dxq2jHKeuO6dTKJmHEjkxfgeXvJUo8VE6WNLFQcMoIjVz56UryJFSRNUQj7J-EfvcogSp42nqPKckvVyZO9R3Tk0k9Jn6l71Js5hCeawIrU9tjcR52VfrVqrUB8XkZTc9dMIrRcXadvm7eknTLDkyTQQMKmAg?purpose=inline)
+
+Repository: [therezor/insta-followers-track](https://github.com/therezor/insta-followers-track?utm_source=chatgpt.com)
+
+Type: Chrome extension.
+
+Version identified: 1.0.0.
+
+Features:
+
+- Find who unfollowed you.
+- Find who does not follow you back.
+- Find people you do not follow back.
+- Identify mutual followers.
+- Identify new followers.
+- Track your recent following activity.
+- Maintain scan history.
+- Track follower gains and losses.
+- Search account lists.
+- Sort account lists.
+- Export results to CSV.
+- Live scan progress.
+- Toolbar popup.
+- Dashboard interface.
+- Separate history for multiple Instagram accounts.
+- Configurable request intervals.
+- Longer pauses after batches of requests.
+
+Limitation: It is designed around scanning your own authenticated Instagram account, not anonymously monitoring arbitrary public accounts. The repository's published release is not proof of compatibility with Instagram's current systems.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://newreleases.io\&sz=32)
+
+New Releases
+
+
+
+## 5. Instaloader — Instagram Data Downloader
+
+[Instaloader Instaloader | MAGI//ARCHIVE](https://images.openai.com/static-rsc-4/UUOLtIUOQDxl3isWIUijMHwT8UsZ_LqtZXkVSDbqaqiYvaollAxbrPYT-qI_l-Y8pEgWOKORB8_Xvd4_sP0MHEOWHbKUkfii9o6SA0qj9o02S8y1yjSr5POm9NXl5AiXoO2ejkA4lXKPtY8-H78ebicBC342r2m4O_Qi9RIlagw?purpose=inline)
+
+Best Python downloading foundation
+
+Repository: [instaloader/instaloader](https://github.com/instaloader/instaloader?utm_source=chatgpt.com)
+
+Technology: Python.
+
+This is worth investigating if you want to build a Python-based Instagram media downloading system.
+
+Features:
+
+- Download public Instagram profiles' posts.
+- Download photos.
+- Download videos.
+- Download captions.
+- Download hashtags' public posts.
+- Download location-based posts.
+- Download profile pictures.
+- Download post metadata.
+- Download comments where accessible.
+- Download Stories with an authenticated session and appropriate access.
+- Download Highlights where accessible.
+- Download tagged posts.
+- Download profile information.
+- Organize downloads into directories.
+- Filename customization.
+- JSON metadata.
+- Post timestamps.
+- Profile metadata.
+- Resume interrupted downloads.
+- Command-line interface.
+- Python API for integration.
+- Session management.
+
+Example:
+
+```
+pip install instaloader
+
+# Download a public profile's posts
+instaloader PROFILE_USERNAME
+
+# Download a profile picture
+instaloader --no-posts PROFILE_USERNAME
+```
+
+Limitations:
+
+- It is primarily a downloader, not a complete anonymous Story viewer.
+- Some functionality requires authentication.
+- Stories and other restricted information may require an eligible account.
+- Instagram rate limits and access restrictions can interrupt downloads.
+- It does not provide built-in historical follower monitoring.
+
+This is a strong building block, but not a complete replacement for the websites you listed.
+
+## 6. gallery-dl — Media Downloading Framework
+
+['Gallery-dl' that allows you to download all images such as Twitter, Pixiv, Nico Nico still images at once - GIGAZINE](https://images.openai.com/static-rsc-4/rTEHJw_GCQJcr1vGesmaLV_h1VHTiAYbyPdvfNkHu-1y6WkOE4qHl66wmG5iklUSpzH8c8VFLdVkZwnGxE1Sw5rUKxpC5-bMVdUEfL79BrLhPZI8vD2I_62-uhA-YxMq7K4xJ5MQggjc9tlzmHaJlVAVs4KKl9G_lGAEt5ZrkdU?purpose=inline)
+
+Repository: [mikf/gallery-dl](https://github.com/mikf/gallery-dl?utm_source=chatgpt.com)
+
+Technology: Python.
+
+Features:
+
+- Download supported Instagram media.
+- Download image galleries.
+- Download supported post media.
+- Download videos where supported.
+- Batch downloading.
+- Configuration files.
+- Custom download directories.
+- Filename templates.
+- Metadata handling.
+- Authentication configuration where required.
+- Retry mechanisms.
+- Rate-limit handling options.
+- Command-line interface.
+- Python-based extensibility.
+- Integration into larger downloading applications.
+
+Limitations:
+
+- It is a general-purpose media downloader.
+- It is not an Instagram analytics dashboard.
+- It does not independently implement a full follower-history tracker.
+- Instagram support depends on the current extractor and access restrictions.
+
+# 2. Additional tools worth investigating
+
+These are useful technical libraries and projects, but they are not complete replacements for your 17 websites.
+
+| Project         | GitHub                                                                            | Main purpose                 |
+| --------------- | --------------------------------------------------------------------------------- | ---------------------------- |
+| Instaloader     | [Repository](https://github.com/instaloader/instaloader?utm_source=chatgpt.com)   | Instagram downloading        |
+| gallery-dl      | [Repository](https://github.com/mikf/gallery-dl?utm_source=chatgpt.com)           | Media downloading            |
+| instagrapi      | [Repository](https://github.com/subzeroid/instagrapi?utm_source=chatgpt.com)      | Python Instagram client      |
+| instaloader     | [Repository](https://github.com/instaloader/instaloader?utm_source=chatgpt.com)   | Profile and media collection |
+| SafeUnfollow    | [Repository](https://github.com/ignromanov/safe-unfollow?utm_source=chatgpt.com)  | Unfollowers and mutuals      |
+| IG Story Viewer | [Repository](https://github.com/GordonBai/ig-story-viewer?utm_source=chatgpt.com) | Anonymous public viewer      |
+
+About instagrapi: It provides a Python interface to Instagram functionality, including profile, media and relationship operations, but relies on unofficial interfaces and commonly requires authentication. It should not be treated as a guaranteed anonymous data source.
+
+# 3. Which GitHub projects cover your requirements?
+
+Here is my practical assessment:
+
+| Required functionality        | Best project                               |
+| ----------------------------- | ------------------------------------------ |
+| Anonymous public Story viewer | ig-anon-viewer                             |
+| Public profile viewer         | ig-anon-viewer                             |
+| Public posts viewer           | ig-anon-viewer                             |
+| Story downloader              | ig-anon-viewer / Instaloader               |
+| Reels downloader              | React Native Instagram Tools               |
+| Highlights downloader         | React Native Instagram Tools / Instaloader |
+| Photo and video downloader    | Instaloader / gallery-dl                   |
+| Followers and Following lists | React Native Instagram Tools               |
+| Unfollowers detection         | SafeUnfollow                               |
+| Not following back            | SafeUnfollow                               |
+| Mutual followers              | SafeUnfollow                               |
+| Recent followers history      | Insta-Followers-Track                      |
+| Recent following history      | Insta-Followers-Track                      |
+| Historical snapshots          | Insta-Followers-Track                      |
+| CSV export                    | Insta-Followers-Track                      |
+| Profile monitoring            | Requires additional development            |
+| Automatic Story monitoring    | Requires additional development            |
+| Profile analytics             | Requires additional development            |
+
+# 4. My recommended combination
+
+If I were building one comprehensive application from these projects, I would use this combination:
+
+## Recommended open-source foundation
+
+1\. Anonymous Viewer
+
+Primary
+
+GordonBai/ig-story-viewer
+
+Profile browsing, Stories, posts and downloading.
+
+[GitHub repository](https://github.com/GordonBai/ig-story-viewer?utm_source=chatgpt.com)
+
+2\. Downloading Engine
+
+Instaloader + gallery-dl
+
+Media collection and download workflows.
+
+[Instaloader](https://github.com/instaloader/instaloader?utm_source=chatgpt.com) · [gallery-dl](https://github.com/mikf/gallery-dl?utm_source=chatgpt.com)
+
+3\. Followers and Following
+
+huseyinbozkurt/instagram-tools-RN-app
+
+Follower lists, following lists and relationship comparison.
+
+[GitHub repository](https://github.com/huseyinbozkuurt/instagram-tools-RN-app?utm_source=chatgpt.com)
+
+4\. Unfollowers and Mutuals
+
+ignromanov/safe-unfollow
+
+Private, local follower analysis using Instagram exports.
+
+[GitHub repository](https://github.com/ignromanov/safe-unfollow?utm_source=chatgpt.com)
+
+5\. Historical Tracking
+
+therezor/insta-followers-track
+
+Scan history, follower changes and CSV exports.
+
+[GitHub repository](https://github.com/therezor/insta-followers-track?utm_source=chatgpt.com)
+
+# 5. Can these projects work 100%?
+
+I want to be honest about this: No responsible developer can guarantee 100% working Instagram scraping tools.
+
+There are three major problems:
+
+1. Instagram regularly changes its internal interfaces and access restrictions.
+2. Rate limits, IP restrictions and login requirements can break data retrieval.
+3. Public data availability does not guarantee historical information or chronological timestamps.
+
+Also, the anonymous viewer repository has only two commits and very little GitHub adoption in the information returned during this research. Its code and real-data provider need careful testing before production use.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://github.com\&sz=32)
+
+GitHub
+
+
+
+My recommendation is to prioritize projects with:
+
+- Public source code.
+- Reproducible installation instructions.
+- A working real-data provider.
+- Recent commits and resolved issues.
+- Automated tests.
+- No requirement to submit your Instagram password to an unknown service.
+- Graceful handling of Instagram API failures.
+
+# 6. One question before I recommend the final architecture
+
+What do you actually want to build or use?
+
+1\. Application platform
+
+Windows desktop application
+
+Website / Web application
+
+Both Windows and Web
+
+Just existing GitHub tools that I can run
+
+2\. Whose Instagram accounts do you want to analyze?
+
+Any public Instagram account
+
+Only my own Instagram account
+
+Both my account and public accounts
+
+3\. Login preference
+
+No Instagram login whatsoever
+
+Optional login, but public viewing without login
+
+Login for my own account's tracking only
+
+4\. Feature coverage
+
+Everything from all 17 websites
+
+Anonymous viewer and downloader
+
+Followers, following and historical tracking
+
+Submit requirements
+
+With these answers, I can narrow this down to a much more useful list of GitHub repositories, including their actual working capabilities, dependencies, installation instructions, limitations and which projects can be combined without duplicating functionality.
+----------
+

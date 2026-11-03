@@ -1,0 +1,33 @@
+name: Windows build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install project and build tools
+        run: python -m pip install -e ".[dev]"
+      - name: Run tests and lint
+        run: |
+          ruff check .
+          pytest
+      - name: Build portable folder
+        run: .\scripts\build_windows.ps1
+        shell: pwsh
+      - name: Upload portable build
+        uses: actions/upload-artifact@v4
+        with:
+          name: InstagramResearchSuite-Windows-Portable
+          path: dist/InstagramResearchSuite/

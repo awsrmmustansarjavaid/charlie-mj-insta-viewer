@@ -1,117 +1,82 @@
-# Charlie MJ Insta Viewer & Downloader
+# Instagram Research Suite
 
-A planned Windows desktop application for managing supported public Instagram profile information and media workflows in one place.
+A Windows desktop research workspace with an Instagram-inspired browsing UI, local snapshots,
+engagement exploration, mentions, account classification, and export tools.
 
-![Project concept banner](assets/charlie-mj-insta-viewer-banner.png)
+> **Data access notice:** This repository ships with a clearly labelled demo data provider.
+> Instagram does not provide unrestricted access to arbitrary accounts' follower/following
+> lists, private stories, likes, or comments. Real integrations must use Meta-authorised
+> permissions or another lawful, supported source. The application never bypasses login,
+> access controls, private-account restrictions, or rate limits.
 
-> **Development status:** This repository currently contains the React/Vite frontend demonstration. The Tauri desktop shell, Rust backend, SQLite persistence, live provider integrations, monitoring bot and production download engine are planned work and are not yet implemented. Mock records must not be mistaken for live Instagram data.
+## Features in this starter release
 
-## Project at a glance
+- Dark dashboard with sidebar navigation and responsive desktop panels.
+- Instagram-style feed/profile/story/highlight browsing using demo content.
+- Follower and following explorer with search, completeness state, and local snapshots.
+- Snapshot history and added/removed comparison.
+- Account-type and public/private breakdown; gender is shown as **unknown** unless a
+  source explicitly provides authorised aggregate demographic data.
+- Post engagement view with demo comments/replies and emoji frequency analysis.
+- Mentions and tags timeline (only records supplied by the connected provider).
+- CSV export for account lists.
+- SQLite persistence, settings, structured logging, and tests.
 
-- **Frontend prototype:** React, TypeScript, Vite and Tailwind CSS.
-- **Planned desktop framework:** Tauri 2.
-- **Planned native backend:** Rust.
-- **Planned local database:** SQLite.
-- **Target platform:** Windows 10/11 (final supported versions to be validated).
-- **Distribution goal:** Portable Windows package and optional installer.
+## Requirements
 
-## Planned features
+- Windows 10/11 (64-bit)
+- Python 3.11+
+- Internet connection only if a future provider integration requires it
 
-- Multi-profile management and search.
-- Stories, Story Inspector and Story calendar.
-- Publication, detection and download timestamps kept separate.
-- Mention metadata display when supplied by the connected provider.
-- Highlights, Posts, carousels, Reels and supported repost records.
-- Profile-picture viewing and downloads.
-- Scheduled profile monitoring and visibility-state history where observable.
-- New-content notifications and automatic download rules.
-- Centralized download manager and local media library.
-- Searchable activity timeline and daily/weekly/monthly Markdown reports.
-- Backup, restore, configurable settings and local-first storage.
-
-Feature availability depends on the connected provider. The application will not bypass private-account restrictions, authentication controls or provider rate limits, and it will not invent unavailable timestamps or mention data.
-
-## Screenshots and artwork
-
-The banner in `assets/` is a concept illustration for the intended design. It is not a screenshot of a completed desktop build.
-
-## Quick start: current frontend prototype
-
-### Requirements
-
-- Git
-- Node.js LTS
-- npm
-
-### Run locally
+## Run from source
 
 ```powershell
-git clone https://github.com/awsrmmustansarjavaid/charlie-mj-insta-viewer.git
-cd charlie-mj-insta-viewer
-npm install
-npm run dev
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python main.py
 ```
 
-Open the local URL printed by Vite.
+## Build a portable Windows executable
 
-### Build the web frontend
+Run on Windows, not Linux/macOS:
 
 ```powershell
-npm run build
-npm run preview
+.\scripts\build_windows.ps1
 ```
 
-The output is written to `dist/`. This is a static web build, **not** a Windows EXE.
+The build creates `dist\InstagramResearchSuite\InstagramResearchSuite.exe` using PyInstaller
+one-folder mode. The `data` directory is stored beside the executable in portable mode when
+writable; otherwise the app uses the user's local application-data directory.
 
-## Planned Windows desktop build
+For a single-file executable, change `--onedir` to `--onefile` in the build script. One-folder
+mode is recommended for startup speed, diagnostics, and predictable asset handling.
 
-Tauri has not yet been integrated into the current prototype. After the Tauri project, Rust backend, Windows prerequisites and desktop scripts are implemented, the intended workflow will be similar to:
+## GitHub setup
+
+1. Create an empty GitHub repository named `InstagramResearchSuite`.
+2. Extract this project.
+3. Run:
 
 ```powershell
-npm install
-npm run tauri:dev
-npm run tauri:build
+git init
+git add .
+git commit -m "Initial Instagram Research Suite desktop app"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/InstagramResearchSuite.git
+git push -u origin main
 ```
 
-These commands are future targets and are not available in the current repository until configured. See [Windows Build Guide](docs/BUILD_WINDOWS.md).
+## Provider integration contract
 
-## Repository documentation
+Implement `app/services/provider.py` and provide an implementation of `InstagramDataProvider`.
+A provider must report source, retrieval time, completeness, pagination state, and any limitation.
+Do not silently label partial results as complete.
 
-- [Project Overview](docs/PROJECT_OVERVIEW.md) — purpose, motivation, goals and current status.
-- [Architecture Design](docs/ARCHITECTURE.md) — frontend, Tauri/Rust, providers, scheduler, downloader and storage boundaries.
-- [Feature Catalogue](docs/FEATURES.md) — detailed feature inventory and acceptance expectations.
-- [Development Guide](docs/DEVELOPMENT.md) — prerequisites, current commands, workflow and definition of done.
-- [Windows Build Guide](docs/BUILD_WINDOWS.md) — web build versus future portable desktop packaging.
-- [Data Providers](docs/DATA_PROVIDERS.md) — provider interface, capability registry and metadata provenance.
-- [Database Design](docs/DATABASE.md) — proposed SQLite entities, timestamps, indexes and migrations.
-- [Frontend Design Guide](docs/DESIGN_GUIDE.md) — navigation, grids, Story Inspector and visual principles.
-- [Code Comment Standards](docs/COMMENTING_STANDARDS.md) — required comments and file documentation conventions.
-- [Security & Privacy](docs/SECURITY_PRIVACY.md) — local data, credentials, filesystem and responsible provider use.
-- [Development Roadmap](docs/ROADMAP.md) — phased implementation and exit criteria.
+## Current release status
 
-## Code documentation policy
-
-Every authored source file should include a useful purpose comment or module docstring where the file format supports comments. Comments must explain responsibility, important decisions and side effects—not merely repeat code.
-
-Strict JSON formats do not support comments. Do not add comments to `package.json`, lockfiles or `.webmanifest`; document those settings in the relevant Markdown files instead. See [Code Comment Standards](docs/COMMENTING_STANDARDS.md).
-
-## Data provider and feature limitations
-
-Instagram API capabilities and third-party provider access vary by account type, permissions, endpoint and provider terms. The app must show capability status for each operation. Exact Story publication times, structured Story mentions, arbitrary follower/following lists, Highlights and repost records must not be promised unless the selected authorized source actually provides them.
-
-## Existing frontend preservation
-
-The current frontend is the starting point. New desktop functionality should be added incrementally, retaining existing routes, components, models and local demo behavior until an equivalent replacement is implemented and tested.
-
-## Contributing / development
-
-Before changing a feature:
-1. Read the relevant documents in `docs/`.
-2. Check the existing implementation and preserve its behavior.
-3. Add tests for new behavior.
-4. Update the feature and architecture documentation.
-5. Verify the build and clearly document any unsupported capability.
-
-## Disclaimer
-
-Charlie MJ Insta Viewer & Downloader is an independent project and is not affiliated with, endorsed by or sponsored by Instagram or Meta. Use only data sources and workflows that you are authorized to use. Respect platform terms, creator rights and applicable laws.
+This is a functional desktop foundation with local demo data and local snapshot workflows.
+It is not an official Instagram client, does not authenticate to Instagram, and does not
+promise arbitrary-account or private-account access. Real provider integrations are a
+separate, permission-dependent milestone.

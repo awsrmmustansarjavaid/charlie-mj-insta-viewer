@@ -1,57 +1,10 @@
-# Dependencies installed locally by npm.
-node_modules/
-
-# Vite and TypeScript build output.
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+build/
 dist/
-dist-ssr/
-*.tsbuildinfo
-
-# Tauri/Rust build output (used when the desktop shell is added).
-src-tauri/target/
-target/
-*.pdb
-
-# Local environment files may contain API keys or provider credentials.
-.env
-.env.*
-!.env.example
-
-# Local application data must not be committed.
+*.spec
 data/
-database/
-*.db
-*.sqlite
 *.sqlite3
-*.db-shm
-*.db-wal
-
-# Downloaded media, generated reports and local activity logs are user data.
-activity/
-logs/
-backups/
-cache/
-thumbnails/
-
-# Local editor and operating-system metadata.
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# Test, coverage and temporary output.
-coverage/
-.nyc_output/
-playwright-report/
-test-results/
 *.log
-*.tmp
-*.temp
-
-# Signing keys, certificates and private release material.
-*.key
-*.pem
-*.p12
-*.pfx
-*.cer
-*.crt
