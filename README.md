@@ -80,3 +80,17 @@ This is a functional desktop foundation with local demo data and local snapshot 
 It is not an official Instagram client, does not authenticate to Instagram, and does not
 promise arbitrary-account or private-account access. Real provider integrations are a
 separate, permission-dependent milestone.
+
+## Quality checks
+
+```powershell
+python -m pip install -r requirements-dev.txt
+python -m ruff check .
+python -m compileall -q main.py app instagram_research_suite tests
+python -m pytest -q
+```
+
+The CI workflow runs linting, compilation, and tests, then builds the Windows portable
+folder distribution and uploads it as a GitHub Actions artifact. The historical
+`instagram_research_suite.storage.database` import remains available as a compatibility
+shim; new code should import `Database` from `app.data.database`.

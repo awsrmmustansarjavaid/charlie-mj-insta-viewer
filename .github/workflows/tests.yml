@@ -1,16 +1,42 @@
-name: Tests
+name: Tests and lint
 
 on:
   push:
   pull_request:
 
 jobs:
-  test:
+  quality:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: python -m pip install -r requirements-dev.txt
-      - run: python -m pytest -q
+          cache: pip
+      - name: Install development dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Lint
+        run: python -m ruff check .
+      - name: Compile Python sources
+        run: python -m compileall -q main.py app instagram_research_suite tests
+      - name: Run tests
+        run: python -m pytest -q
+
+  windows-build:
+    runs-on: windows-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Build portable application
+        shell: pwsh
+        run: .\scripts\build_windows.ps1
+      - name: Upload portable build
+        uses: actions/upload-artifact@v4
+        with:
+          name: InstagramResearchSuite-Windows-Portable
+          path: dist/InstagramResearchSuite/
+          if-no-files-found: error
