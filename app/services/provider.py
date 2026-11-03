@@ -43,7 +43,7 @@ class Comment:
     username: str
     text: str
     likes: int = 0
-    replies: list["Comment"] = field(default_factory=list)
+    replies: list[Comment] = field(default_factory=list)
 
 
 class InstagramDataProvider(Protocol):
