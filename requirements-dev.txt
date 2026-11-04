@@ -1,5 +1,5 @@
 -r requirements.txt
-pytest>=8.0
-pytest-qt>=4.4
-pyinstaller>=6.8
-ruff>=0.6
+pytest>=8
+ruff>=0.5
+pyinstaller>=6.6
+pillow>=10

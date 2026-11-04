@@ -1,1 +1,1 @@
-"""Desktop user-interface package."""
+"""Package."""

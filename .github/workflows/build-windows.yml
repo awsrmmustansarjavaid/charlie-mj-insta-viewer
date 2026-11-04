@@ -1,0 +1,35 @@
+name: Build Windows portable
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements-dev.txt
+      - run: pytest
+        env: { QT_QPA_PLATFORM: offscreen }
+      - name: Portable folder
+        run: pyinstaller --noconfirm --clean InstagramResearchSuite.spec
+      - name: Single file
+        run: pyinstaller --noconfirm --clean --distpath dist-onefile InstagramResearchSuite.spec
+        env: { IRS_ONEFILE: "1" }
+      - name: Zip portable folder
+        run: Compress-Archive -Path dist\InstagramResearchSuite -DestinationPath InstagramResearchSuite-portable.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: InstagramResearchSuite-windows
+          path: |
+            InstagramResearchSuite-portable.zip
+            dist-onefile/InstagramResearchSuite.exe
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            InstagramResearchSuite-portable.zip
+            dist-onefile/InstagramResearchSuite.exe

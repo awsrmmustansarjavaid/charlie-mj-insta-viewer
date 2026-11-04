@@ -1,152 +1,40 @@
-# Feature Catalogue
+# Feature master list
 
-This document is the feature inventory and acceptance reference for the planned application.
+Status: ✅ implemented & tested · 🟡 implemented, depends on source/permissions · ⛔ not provided (and why)
 
-## 1. Dashboard
+## Your five requirements
+| Feature | Status | Notes |
+|---|---|---|
+| Full followers list, completeness shown | ✅ / 🟡 | ✅ from data export or demo; ⛔ via Graph API (Meta exposes counts only) |
+| Full following list | ✅ / 🟡 | same |
+| Snapshots, history, compare any two | ✅ | stored in SQLite; diff = added / removed |
+| Mutuals, not-following-back, fans you don't follow | ✅ | derived from the two latest snapshots |
+| Account type / public vs private / verified counts | 🟡 | only what the source labels; else Unknown |
+| Girl/boy counts | 🟡 | aggregate from Instagram Insights (own account); individual gender is never inferred |
+| Comments + nested replies, reply to comment | 🟡 | demo ✅; Graph API for your own media |
+| Heart / thumbs-up / other emoji counts | ✅ | counted from comment text (not reaction buttons — Instagram exposes none) |
+| Mentions in captions / comments / tags | ✅ / 🟡 | story mentions need webhooks via the official API |
+| Instagram-style feed, profile, highlights, stories, posts, reels | ✅ | demo data; real media for own/Business accounts via Graph API |
 
-- Profile count and monitoring status.
-- New content counts.
-- Download totals and active queue.
-- Recent activity and notifications.
-- Last and next monitoring runs.
-- Storage usage and quick actions.
+## Website-tool features (from the research documents)
+| Capability seen on the 16 sites | Status |
+|---|---|
+| Profile viewer, profile picture viewer / download | ✅ |
+| Story viewer & downloader, highlights viewer & downloader | ✅ demo · 🟡 own stories (API) · ⛔ highlights via API |
+| Post / carousel / reel viewing and downloading | ✅ (HTTPS only, 200 MB cap, duplicate detection) |
+| New follower / new following / unfollower tracking | ✅ via snapshots (reported as "first detected") |
+| Profile change detection (picture, bio, name, link, visibility, counts) | ✅ |
+| New post / reel / story detection | ✅ |
+| Engagement, posting-pattern, hashtag analytics, profile comparison | ✅ |
+| Export CSV / Excel / PDF / HTML / JSON / Markdown, backup & restore | ✅ |
+| Anonymous viewing of *any* account's stories/lists via scrapers | ⛔ no compliant official source; see below |
+| Last seen / online status | ⛔ not exposed by Instagram |
+| Account creation date, registration email / phone / location | ⛔ private |
+| Who viewed / liked a post or story | ⛔ not exposed for other users |
+| Story replies / private DMs | ⛔ private |
 
-Acceptance: all dashboard metrics must be calculated from local records or clearly labeled provider data; demo fixture values must be labeled as demo.
+## Why ⛔ items are not built
+They are either not exposed by any legitimate Instagram interface or can only be obtained by scraping that violates Instagram's Terms and risks account bans and privacy harm. The provider interface (docs/PROVIDERS.md) lets you add a source **you are authorised to use**.
 
-## 2. Profile manager
-
-- Add by username or supported profile URL.
-- Normalize usernames and avoid duplicates.
-- Edit notes, tags, favorites and schedule.
-- Pause or resume monitoring.
-- Remove a profile without silently deleting its downloaded files.
-- Show latest known profile snapshot and last check.
-
-Acceptance: profile records remain after application restart and are not duplicated by equivalent URL/username input.
-
-## 3. Stories and Story Inspector
-
-- Photo and video preview.
-- Sequential navigation and full-screen view.
-- Metadata panel.
-- Story calendar.
-- Mention filters when structured mention data exists.
-- Save and download actions.
-
-Acceptance: published, detected and downloaded times are stored separately. Missing publication timestamps display as unavailable. No timestamp may be synthesized from detection time.
-
-## 4. Highlights
-
-- Collection cover and title.
-- Available media list.
-- Media viewer.
-- Metadata and download state.
-- Search and filtering.
-
-Acceptance: only collections and items returned by the provider are shown as live data.
-
-## 5. Posts and carousels
-
-- Image, video and carousel cards.
-- Caption and available engagement metadata.
-- Media preview and original link.
-- Individual and multi-item download.
-
-Acceptance: carousel slides preserve their order and association with the parent post.
-
-## 6. Reels and reposts
-
-- Reels gallery and player.
-- Available caption, creator and publication information.
-- Repost record with original creator/source attribution.
-- Clear distinction between a native repost record and a normal shared link.
-
-Acceptance: repost classification is based on provider metadata, not merely a guessed relationship.
-
-## 7. Profile pictures
-
-- Preview, zoom and download.
-- Available resolution information.
-- Optional local snapshots to compare changes.
-
-Acceptance: the app describes an image as the highest available source resolution only when that is known.
-
-## 8. Followers and following
-
-- Display lists only if the connected provider is authorized and capable of returning them.
-- Search and sort returned entries.
-- Export returned data.
-- Compare snapshots only when comparable snapshots exist.
-
-Acceptance: counts must not be represented as full lists. Unsupported list retrieval must be shown as unavailable.
-
-## 9. Monitoring bot
-
-- Multiple profiles.
-- Per-profile and global schedules.
-- Start, pause, resume and stop.
-- New-content detection using stable provider IDs.
-- Visibility state snapshots where observable.
-- Retry and backoff.
-- Automatic download rules.
-
-Acceptance: temporary provider/network failures do not become false private/public transitions. Repeated checks do not create duplicate media or notifications.
-
-## 10. Notifications
-
-- New content.
-- Visibility state change.
-- Mention metadata detected.
-- Download completion/failure.
-- Monitoring errors.
-- In-app button feedback.
-
-Acceptance: success notifications appear only after the operation succeeds. Progress notifications use a separate status.
-
-## 11. Downloader
-
-- Queue, progress, pause/cancel where supported.
-- Retry failed downloads.
-- Category-specific directories.
-- Safe filenames.
-- Duplicate detection.
-- Open file/folder.
-- Download history.
-
-Suggested filename:
-`{username}-{category}-{DD-Month-YYYY}_{hh-mm}_{AM/PM}.{extension}`
-
-Use the local download time by default. Allow original publication time only when it is reliably supplied. Resolve filename collisions with a stable suffix.
-
-## 12. Saved Library
-
-- Grid/list view.
-- Category and date filters.
-- Search by username and filename.
-- Favorites and collections.
-- Metadata and file location.
-- Multi-select and deletion.
-
-Acceptance: deleting a database reference and deleting the actual file must be separate, explicit actions.
-
-## 13. Activity and reports
-
-- Structured activity records.
-- Search and filters.
-- Daily, weekly, monthly and custom reports.
-- Per-profile reports.
-- Markdown, JSON and CSV export; PDF may be added later.
-
-Acceptance: SQLite is the authoritative activity store. Markdown reports are generated views and can be regenerated.
-
-## 14. Settings and maintenance
-
-- Appearance and language.
-- Provider configuration.
-- Monitoring schedules.
-- Notification preferences.
-- Download naming and paths.
-- Storage, cache and backup.
-- Export, restore and clear-history controls.
-
-Acceptance: settings are validated, persisted and migrated safely between versions.
+## Beyond the original lists
+Command palette (Ctrl+K), provider health & capability matrix, silent baseline + idempotent change detection, auto-pause after 5 failures, event de-duplication, wallpaper/glass/minimal card styles, reduced-motion option, tray monitoring, daily auto-backup, integrity check, per-profile data deletion, local favourites.

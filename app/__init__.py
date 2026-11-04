@@ -1,1 +1,3 @@
-"""Instagram Research Suite application package."""
+"""Instagram Research Suite."""
+
+__version__ = "1.0.0"

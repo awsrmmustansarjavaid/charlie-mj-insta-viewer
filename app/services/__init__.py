@@ -1,1 +1,1 @@
-"""Data-provider and analytics services."""
+"""Package."""

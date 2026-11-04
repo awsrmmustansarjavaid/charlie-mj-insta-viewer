@@ -1,611 +1,415 @@
-"""Main desktop window and page composition."""
+"""Main window: sidebar, backdrop, command palette, toasts, tray."""
 
 from __future__ import annotations
 
-import csv
 import logging
-from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QPointF, QRectF, Qt, QTimer
+from PySide6.QtGui import (
+    QAction,
+    QBrush,
+    QColor,
+    QIcon,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QShortcut,
+)
 from PySide6.QtWidgets import (
-    QComboBox,
-    QFileDialog,
-    QFrame,
+    QApplication,
+    QButtonGroup,
+    QDialog,
     QHBoxLayout,
     QLabel,
     QLineEdit,
+    QListWidget,
     QMainWindow,
-    QMessageBox,
+    QMenu,
     QPushButton,
     QStackedWidget,
-    QTableWidget,
-    QTableWidgetItem,
+    QSystemTrayIcon,
     QVBoxLayout,
     QWidget,
-    QHeaderView,
 )
 
-from app.data.database import Database
-from app.services.analytics import classify_accounts, compare_usernames, emoji_counts
-from app.services.provider import Account, Comment, DemoProvider, RetrievalStatus
-from app.ui.theme import DARK_STYLESHEET
+from app import __version__
+from app.core.resources import resource_path
+from app.ui.context import AppContext
+from app.ui.pages.dashboard import DashboardPage
+from app.ui.pages.engagement import EngagementPage
+from app.ui.pages.feed import FeedPage
+from app.ui.pages.followers import FollowersPage
+from app.ui.pages.history import SnapshotsPage, TimelinePage
+from app.ui.pages.insights import InsightsPage
+from app.ui.pages.mentions import MentionsPage
+from app.ui.pages.monitor import MonitorPage
+from app.ui.pages.profile import ProfilePage
+from app.ui.pages.system import LogsPage, NotificationsPage, ProvidersPage, SettingsPage
+from app.ui.pages.tools import ComparePage, ExportPage, LibraryPage
+from app.ui.scheduler import MonitorScheduler
+from app.ui.theme import build_stylesheet
+from app.ui.widgets import chip
+
+log = logging.getLogger(__name__)
+
+NAV = [
+    ("OVERVIEW", [("dashboard", "▣", "Dashboard")]),
+    ("INSTAGRAM EXPERIENCE", [("feed", "⌂", "Home feed & stories"), ("profile", "◉", "Profile explorer")]),
+    ("TRACKING", [("followers", "⇄", "Followers & following"), ("insights", "◔", "Account insights"),
+                  ("snapshots", "⧉", "Snapshots & compare"), ("timeline", "⏱", "Activity timeline")]),
+    ("ENGAGEMENT", [("engagement", "♡", "Posts & comments"), ("mentions", "@", "Mentions & tags")]),
+    ("MONITORING", [("monitor", "◎", "Monitoring"), ("notifications", "🔔", "Notifications")]),
+    ("TOOLS", [("compare", "⚖", "Compare profiles"), ("library", "▤", "Library & downloads"),
+               ("export", "⇪", "Export & backup")]),
+    ("SYSTEM", [("providers", "⛁", "Provider manager"), ("settings", "⚙", "Settings"), ("logs", "☰", "Logs & diagnostics")]),
+]
+
+
+def app_icon() -> QIcon:
+    path = resource_path("assets/icon.png")
+    if path.exists():
+        return QIcon(str(path))
+    pm = QPixmap(128, 128)
+    pm.fill(Qt.GlobalColor.transparent)
+    p = QPainter(pm)
+    p.setRenderHint(QPainter.RenderHint.Antialiasing)
+    g = QLinearGradient(0, 128, 128, 0)
+    for pos, col in ((0, "#feda75"), (0.4, "#d62976"), (1, "#4f5bd5")):
+        g.setColorAt(pos, QColor(col))
+    p.setBrush(QBrush(g))
+    p.setPen(Qt.PenStyle.NoPen)
+    p.drawRoundedRect(QRectF(4, 4, 120, 120), 30, 30)
+    p.setBrush(Qt.BrushStyle.NoBrush)
+    p.setPen(QColor("white"))
+    p.drawRoundedRect(QRectF(30, 30, 68, 68), 20, 20)
+    p.drawEllipse(QPointF(64, 64), 17, 17)
+    p.end()
+    return QIcon(pm)
+
+
+class Backdrop(QWidget):
+    """Paints the gradient / solid / wallpaper behind everything."""
+
+    def __init__(self, ctx: AppContext):
+        super().__init__()
+        self.ctx = ctx
+        self._img: QPixmap | None = None
+        self._img_path = ""
+
+    def paintEvent(self, _e):  # noqa: N802
+        t = self.ctx.theme
+        p = QPainter(self)
+        pal = t.palette()
+        p.fillRect(self.rect(), QColor(pal["bg"]))
+        if t.background == "Gradient" and t.dark:
+            rg = QRadialGradient(self.width() * 0.85, self.height() * 0.05, self.width() * 0.7)
+            rg.setColorAt(0, QColor(139, 92, 246, 80))
+            rg.setColorAt(1, QColor(139, 92, 246, 0))
+            p.fillRect(self.rect(), rg)
+            rg2 = QRadialGradient(self.width() * 0.1, self.height() * 0.95, self.width() * 0.6)
+            rg2.setColorAt(0, QColor(34, 211, 238, 50))
+            rg2.setColorAt(1, QColor(34, 211, 238, 0))
+            p.fillRect(self.rect(), rg2)
+        elif t.background == "Gradient":
+            g = QLinearGradient(0, 0, self.width(), self.height())
+            g.setColorAt(0, QColor("#EEF1FF"))
+            g.setColorAt(1, QColor("#F8EEFF"))
+            p.fillRect(self.rect(), g)
+        elif t.background == "Image" and t.background_image:
+            if self._img_path != t.background_image:
+                self._img, self._img_path = QPixmap(t.background_image), t.background_image
+            if self._img and not self._img.isNull():
+                s = self._img.scaled(self.size(), Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                                     Qt.TransformationMode.SmoothTransformation)
+                p.drawPixmap((self.width() - s.width()) // 2, (self.height() - s.height()) // 2, s)
+                shade = QColor(0, 0, 0, int(255 * t.background_dim / 100)) if t.dark else \
+                    QColor(255, 255, 255, int(255 * t.background_dim / 100))
+                p.fillRect(self.rect(), shade)
+
+
+class Toast(QLabel):
+    def __init__(self, parent: QWidget):
+        super().__init__(parent)
+        self.setWordWrap(True)
+        self.setMaximumWidth(380)
+        self.setStyleSheet("background:#1f2a44;color:white;border:1px solid #8B5CF6;border-radius:10px;padding:10px 14px;")
+        self.hide()
+        self.timer = QTimer(self, singleShot=True, interval=4500)
+        self.timer.timeout.connect(self.hide)
+
+    def show_message(self, title: str, body: str) -> None:
+        self.setText(f"<b>{title}</b><br>{body}" if body else f"<b>{title}</b>")
+        self.adjustSize()
+        self.move(self.parent().width() - self.width() - 24, self.parent().height() - self.height() - 24)
+        self.raise_()
+        self.show()
+        self.timer.start()
+
+
+class CommandPalette(QDialog):
+    def __init__(self, win: MainWindow):
+        super().__init__(win)
+        self.win = win
+        self.setWindowTitle("Command palette")
+        self.setMinimumSize(520, 420)
+        lay = QVBoxLayout(self)
+        self.edit = QLineEdit()
+        self.edit.setPlaceholderText("Go to a page, or type a username to open its profile…")
+        self.edit.textChanged.connect(self._fill)
+        self.edit.returnPressed.connect(self._run)
+        self.list = QListWidget()
+        self.list.itemActivated.connect(lambda _i: self._run())
+        lay.addWidget(self.edit)
+        lay.addWidget(self.list)
+        self._fill("")
+
+    def _fill(self, text: str) -> None:
+        self.list.clear()
+        q = text.strip().lower()
+        if q:
+            self.list.addItem(f"Open profile @{q.lstrip('@')}")
+            self.list.item(0).setData(Qt.ItemDataRole.UserRole, ("profile", q.lstrip("@")))
+        for _sec, items in NAV:
+            for key, icon, title in items:
+                if not q or q in title.lower():
+                    self.list.addItem(f"{icon}  {title}")
+                    self.list.item(self.list.count() - 1).setData(Qt.ItemDataRole.UserRole, ("page", key))
+        if not q:
+            for u in self.win.ctx.db.list_searches(6):
+                self.list.addItem(f"↺  @{u}")
+                self.list.item(self.list.count() - 1).setData(Qt.ItemDataRole.UserRole, ("profile", u))
+        self.list.setCurrentRow(0)
+
+    def _run(self) -> None:
+        item = self.list.currentItem()
+        if not item:
+            return
+        kind, val = item.data(Qt.ItemDataRole.UserRole)
+        self.accept()
+        if kind == "page":
+            self.win.show_page(val)
+        else:
+            self.win.ctx.open_profile.emit(val)
 
 
 class MainWindow(QMainWindow):
-    """Primary window: navigation, dashboard, browsing, research and exports."""
-
-    NAV_ITEMS = [
-        "Dashboard",
-        "Instagram Style View",
-        "Profile Analysis",
-        "Followers & Following",
-        "Posts & Engagement",
-        "Mentions & Tags",
-        "Stories & Highlights",
-        "Account Insights",
-        "Snapshots",
-        "Compare Profiles",
-        "Export Center",
-        "Settings",
-    ]
-
-    def __init__(self, database: Database, data_dir: Path):
-        """Build the window and load the local demo provider."""
+    def __init__(self, ctx: AppContext, start_minimized: bool = False):
         super().__init__()
-        self.database = database
-        self.data_dir = data_dir
-        self.provider = DemoProvider()
-        self.profile = "demo_profile"
-        self.current_accounts: list[Account] = []
-        self.current_status: RetrievalStatus | None = None
-        self.current_list_type = "Followers"
+        self.ctx = ctx
+        self.setWindowTitle(f"Instagram Research Suite {__version__}")
+        self.setWindowIcon(app_icon())
+        self.resize(1480, 920)
+        self.setMinimumSize(1100, 700)
+        self.scheduler = MonitorScheduler(ctx)
 
-        self.setWindowTitle("Instagram Research Suite")
-        self.resize(1500, 920)
-        self.setMinimumSize(1180, 760)
-        self.setStyleSheet(DARK_STYLESHEET)
-
-        central = QWidget()
-        root_layout = QHBoxLayout(central)
-        root_layout.setContentsMargins(0, 0, 0, 0)
-        root_layout.setSpacing(0)
-        root_layout.addWidget(self._build_sidebar())
-        root_layout.addWidget(self._build_content(), 1)
+        central = Backdrop(ctx)
         self.setCentralWidget(central)
-        self._show_page(0)
+        outer = QHBoxLayout(central)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.setSpacing(0)
+        outer.addWidget(self._build_sidebar())
+        right = QVBoxLayout()
+        right.setSpacing(0)
+        right.addWidget(self._build_topbar())
+        self.stack = QStackedWidget()
+        right.addWidget(self.stack, 1)
+        outer.addLayout(right, 1)
 
+        self.pages: dict[str, QWidget] = {}
+        for page in (DashboardPage(ctx), FeedPage(ctx), ProfilePage(ctx), FollowersPage(ctx), InsightsPage(ctx),
+                     SnapshotsPage(ctx), TimelinePage(ctx), EngagementPage(ctx), MentionsPage(ctx),
+                     MonitorPage(ctx, self.scheduler), NotificationsPage(ctx), ComparePage(ctx), LibraryPage(ctx),
+                     ExportPage(ctx), ProvidersPage(ctx), SettingsPage(ctx), LogsPage(ctx)):
+            self.pages[page.key] = page
+            self.stack.addWidget(page)
+
+        self.toast = Toast(central)
+        ctx.toast.connect(self.toast.show_message)
+        ctx.navigate.connect(self.show_page)
+        ctx.profile_changed.connect(self._profile_changed)
+        ctx.data_changed.connect(self._refresh_bell)
+        ctx.theme_changed.connect(self.apply_theme)
+        self.scheduler.cycle_finished.connect(self._cycle_done)
+
+        QShortcut(QKeySequence("Ctrl+K"), self, activated=lambda: CommandPalette(self).exec())
+        QShortcut(QKeySequence("F11"), self, activated=lambda: self.showNormal() if self.isFullScreen()
+                  else self.showFullScreen())
+        QShortcut(QKeySequence("Ctrl+R"), self, activated=lambda: self.pages[self.current].on_show())
+        for i, key in enumerate(("dashboard", "feed", "profile", "followers", "engagement", "mentions", "monitor"), 1):
+            QShortcut(QKeySequence(f"Ctrl+{i}"), self, activated=lambda k=key: self.show_page(k))
+
+        self.tray = self._build_tray()
+        self.apply_theme()
+        self.current = "dashboard"
+        self.show_page("dashboard")
+        self._refresh_bell()
+        if start_minimized and self.tray:
+            QTimer.singleShot(0, self.hide)
+
+    # -- construction -----------------------------------------------------------
     def _build_sidebar(self) -> QWidget:
-        """Create the persistent left navigation rail."""
-        sidebar = QWidget()
-        sidebar.setObjectName("Sidebar")
-        sidebar.setFixedWidth(225)
-        layout = QVBoxLayout(sidebar)
-        layout.setContentsMargins(14, 20, 14, 16)
-        layout.setSpacing(7)
-
-        brand = QLabel("◎  Instagram\n     Research Suite")
+        self.sidebar = QWidget()
+        self.sidebar.setObjectName("Sidebar")
+        self.sidebar_lay = QVBoxLayout(self.sidebar)
+        self.sidebar_lay.setContentsMargins(10, 14, 10, 10)
+        self.sidebar_lay.setSpacing(2)
+        self.group = QButtonGroup(self)
+        self.group.setExclusive(True)
+        self.nav_buttons: dict[str, QPushButton] = {}
+        self.section_labels: list[QLabel] = []
+        brand = QLabel("◎  Instagram Research")
         brand.setObjectName("Brand")
-        layout.addWidget(brand)
-        tagline = QLabel("ANALYZE  •  EXPLORE  •  TRACK")
-        tagline.setObjectName("Muted")
-        layout.addWidget(tagline)
-        layout.addSpacing(16)
+        self.brand = brand
+        self.sidebar_lay.addWidget(brand)
+        sub = QLabel("Suite · Windows portable")
+        sub.setObjectName("Muted")
+        self.sub = sub
+        self.sidebar_lay.addWidget(sub)
+        for section, items in NAV:
+            sl = QLabel(section)
+            sl.setObjectName("Section")
+            self.section_labels.append(sl)
+            self.sidebar_lay.addWidget(sl)
+            for key, icon, title in items:
+                b = QPushButton(f"{icon}   {title}".replace("&", "&&"))
+                b.setObjectName("Nav")
+                b.setCheckable(True)
+                b.setProperty("full", f"{icon}   {title}".replace("&", "&&"))
+                b.setProperty("icon_only", icon)
+                b.setToolTip(title)
+                b.clicked.connect(lambda _=False, k=key: self.show_page(k))
+                self.group.addButton(b)
+                self.nav_buttons[key] = b
+                self.sidebar_lay.addWidget(b)
+        self.sidebar_lay.addStretch()
+        self.acct = QLabel("")
+        self.acct.setObjectName("Muted")
+        self.sidebar_lay.addWidget(self.acct)
+        self.sidebar.setFixedWidth(250)
+        return self.sidebar
 
-        self.nav_buttons: list[QPushButton] = []
-        for index, item in enumerate(self.NAV_ITEMS):
-            button = QPushButton(item)
-            button.setObjectName("NavButton")
-            button.setCheckable(True)
-            button.clicked.connect(lambda checked=False, page=index: self._show_page(page))
-            layout.addWidget(button)
-            self.nav_buttons.append(button)
+    def _build_topbar(self) -> QWidget:
+        bar = QWidget()
+        bar.setObjectName("Transparent")
+        lay = QHBoxLayout(bar)
+        lay.setContentsMargins(26, 12, 26, 0)
+        pal = QPushButton("🔍  Search or jump to…   Ctrl+K")
+        pal.setMinimumWidth(320)
+        pal.setStyleSheet("text-align:left;")
+        pal.clicked.connect(lambda: CommandPalette(self).exec())
+        self.profile_chip = chip("")
+        self.provider_chip = chip("")
+        self.bell = QPushButton("🔔")
+        self.bell.setObjectName("Flat")
+        self.bell.clicked.connect(lambda: self.show_page("notifications"))
+        lay.addWidget(pal)
+        lay.addStretch()
+        lay.addWidget(self.profile_chip)
+        lay.addWidget(self.provider_chip)
+        lay.addWidget(self.bell)
+        return bar
 
-        layout.addStretch()
-        account = QLabel("●  Demo Workspace\n    Local sample data")
-        account.setObjectName("Muted")
-        layout.addWidget(account)
-        return sidebar
+    def _build_tray(self) -> QSystemTrayIcon | None:
+        if not QSystemTrayIcon.isSystemTrayAvailable():
+            return None
+        tray = QSystemTrayIcon(app_icon(), self)
+        menu = QMenu()
+        show = QAction("Open Instagram Research Suite", self)
+        show.triggered.connect(self._restore)
+        run = QAction("Run due monitoring checks now", self)
+        run.triggered.connect(self.scheduler.tick)
+        quit_ = QAction("Quit", self)
+        quit_.triggered.connect(self._quit)
+        for a in (show, run, quit_):
+            menu.addAction(a)
+        tray.setContextMenu(menu)
+        tray.activated.connect(lambda r: self._restore() if r == QSystemTrayIcon.ActivationReason.Trigger else None)
+        tray.setToolTip("Instagram Research Suite")
+        tray.show()
+        return tray
 
-    def _build_content(self) -> QWidget:
-        """Create the stacked page area and its top-level header."""
-        container = QWidget()
-        layout = QVBoxLayout(container)
-        layout.setContentsMargins(24, 20, 24, 20)
-        layout.setSpacing(16)
-
-        header = QHBoxLayout()
-        title = QLabel("Instagram Research Suite")
-        title.setObjectName("PageTitle")
-        header.addWidget(title)
-        header.addStretch()
-        self.provider_badge = QLabel("● LOCAL DEMO DATA")
-        self.provider_badge.setObjectName("Muted")
-        header.addWidget(self.provider_badge)
-        layout.addLayout(header)
-
-        self.pages = QStackedWidget()
-        self.pages.addWidget(self._dashboard_page())
-        self.pages.addWidget(self._instagram_page())
-        self.pages.addWidget(self._profile_page())
-        self.pages.addWidget(self._followers_page())
-        self.pages.addWidget(self._engagement_page())
-        self.pages.addWidget(self._mentions_page())
-        self.pages.addWidget(self._stories_page())
-        self.pages.addWidget(self._insights_page())
-        self.pages.addWidget(self._snapshots_page())
-        self.pages.addWidget(self._compare_page())
-        self.pages.addWidget(self._export_page())
-        self.pages.addWidget(self._settings_page())
-        layout.addWidget(self.pages, 1)
-        return container
-
-    def _panel(self, title: str, subtitle: str = "") -> tuple[QFrame, QVBoxLayout]:
-        """Create a standard bordered card panel."""
-        frame = QFrame()
-        frame.setObjectName("Panel")
-        layout = QVBoxLayout(frame)
-        layout.setContentsMargins(16, 14, 16, 16)
-        heading = QLabel(title)
-        heading.setStyleSheet("font-size: 12pt; font-weight: 700; color: #FFFFFF;")
-        layout.addWidget(heading)
-        if subtitle:
-            note = QLabel(subtitle)
-            note.setObjectName("Muted")
-            layout.addWidget(note)
-        return frame, layout
-
-    def _metric_card(self, title: str, value: str, delta: str) -> QFrame:
-        """Create a compact KPI card for dashboard summaries."""
-        card = QFrame()
-        card.setObjectName("MetricCard")
-        layout = QVBoxLayout(card)
-        label = QLabel(title)
-        label.setObjectName("Muted")
-        number = QLabel(value)
-        number.setObjectName("MetricValue")
-        change = QLabel(delta)
-        change.setStyleSheet("color: #34D399;")
-        layout.addWidget(label)
-        layout.addWidget(number)
-        layout.addWidget(change)
-        return card
-
-    def _dashboard_page(self) -> QWidget:
-        """Create the dashboard overview with metrics and quick actions."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        welcome = QLabel("Welcome back, Researcher")
-        welcome.setStyleSheet("font-size: 17pt; font-weight: 700;")
-        layout.addWidget(welcome)
-        note = QLabel("Your workspace overview. Counts below are illustrative demo values.")
-        note.setObjectName("Muted")
-        layout.addWidget(note)
-
-        metrics = QHBoxLayout()
-        for title, value, delta in [
-            ("Total Followers", "12,458", "Demo metric"),
-            ("Following", "587", "Demo metric"),
-            ("Posts", "342", "Demo metric"),
-            ("Engagement Rate", "4.8%", "Demo metric"),
-        ]:
-            metrics.addWidget(self._metric_card(title, value, delta))
-        layout.addLayout(metrics)
-
-        lower = QHBoxLayout()
-        overview, overview_layout = self._panel("Research Overview", "Modules available in this local starter release")
-        for text in [
-            "• Profile and Instagram-style content viewer",
-            "• Follower/following retrieval with completeness status",
-            "• Immutable local snapshots and comparisons",
-            "• Account category and visibility breakdown",
-            "• Comments, replies and visible emoji analysis",
-            "• Mentions, stories and highlights workspace",
-        ]:
-            label = QLabel(text)
-            label.setObjectName("Muted")
-            overview_layout.addWidget(label)
-        lower.addWidget(overview, 2)
-
-        actions, actions_layout = self._panel("Quick Actions")
-        for label, target in [
-            ("View Followers", 3),
-            ("Open Instagram Style View", 1),
-            ("Analyze Account Types", 7),
-            ("View Snapshot History", 8),
-        ]:
-            button = QPushButton(label)
-            button.setObjectName("PrimaryButton")
-            button.clicked.connect(lambda checked=False, page=target: self._show_page(page))
-            actions_layout.addWidget(button)
-        lower.addWidget(actions, 1)
-        layout.addLayout(lower, 1)
-        return page
-
-    def _instagram_page(self) -> QWidget:
-        """Create an Instagram-inspired browsing canvas using sample media cards."""
-        page = QWidget()
-        layout = QHBoxLayout(page)
-        feed, feed_layout = self._panel("Home Feed", "Instagram-inspired demo browsing experience")
-        stories = QHBoxLayout()
-        for name in ["Your Story", "travel_diary", "sarah", "foodie", "nature"]:
-            tile = QLabel(f"◉\n{name}")
-            tile.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            tile.setMinimumWidth(85)
-            tile.setStyleSheet(
-                "background:#202D49;border:2px solid #8B5CF6;border-radius:12px;padding:12px;"
-            )
-            stories.addWidget(tile)
-        feed_layout.addLayout(stories)
-
-        post = QFrame()
-        post.setObjectName("MetricCard")
-        post_layout = QVBoxLayout(post)
-        post_layout.addWidget(QLabel("travel_diary  •  Demo post"))
-        media = QLabel("PHOTO / REEL PREVIEW")
-        media.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        media.setMinimumHeight(300)
-        media.setStyleSheet(
-            "background: qlineargradient(x1:0,y1:0,x2:1,y2:1,stop:0 #173A5E,stop:1 #643B94);"
-            "border-radius:10px;font-size:18pt;font-weight:700;"
-        )
-        post_layout.addWidget(media)
-        post_layout.addWidget(QLabel("♡  12.4K     ◯  342 comments     ↗  Share"))
-        post_layout.addWidget(QLabel("Sunset vibes 🌅  #travel #nature"))
-        feed_layout.addWidget(post)
-        layout.addWidget(feed, 3)
-
-        side, side_layout = self._panel("Suggested for you")
-        for user in ["foodie.life", "nature_lovers", "urban.views", "minimal.style"]:
-            side_layout.addWidget(QLabel(f"◉  {user}       Follow"))
-        side_layout.addStretch()
-        layout.addWidget(side, 1)
-        return page
-
-    def _profile_page(self) -> QWidget:
-        """Create a profile overview with highlights and a post grid placeholder."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        profile, profile_layout = self._panel("Profile Explorer", "Profile details depend on the selected provider.")
-        profile_layout.addWidget(QLabel("◉  travel_diary       Public demo profile"))
-        profile_layout.addWidget(QLabel("342 Posts      48.7K Followers      587 Following"))
-        profile_layout.addWidget(QLabel("Exploring the world one place at a time • Travel / Photography"))
-        profile_layout.addWidget(QLabel("Highlights:  Bali  •  Japan  •  Europe  •  Food  •  Nature"))
-        layout.addWidget(profile)
-        grid, grid_layout = self._panel("Posts / Reels / Tagged")
-        grid_layout.addWidget(QLabel("Select Instagram Style View to explore the sample feed."))
-        layout.addWidget(grid, 1)
-        return page
-
-    def _followers_page(self) -> QWidget:
-        """Build the follower/following explorer with snapshot controls."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel(
-            "Followers & Following Explorer",
-            "Complete means complete for the selected provider response—not necessarily complete for Instagram."
-        )
-        controls = QHBoxLayout()
-        self.list_selector = QComboBox()
-        self.list_selector.addItems(["Followers", "Following"])
-        self.list_selector.currentTextChanged.connect(self._load_accounts)
-        self.account_search = QLineEdit()
-        self.account_search.setPlaceholderText("Search username or display name...")
-        self.account_search.textChanged.connect(self._filter_accounts)
-        load_button = QPushButton("Load List")
-        load_button.setObjectName("PrimaryButton")
-        load_button.clicked.connect(self._load_accounts)
-        snapshot_button = QPushButton("Take Snapshot")
-        snapshot_button.clicked.connect(self._take_snapshot)
-        export_button = QPushButton("Export CSV")
-        export_button.clicked.connect(self._export_accounts)
-        controls.addWidget(self.list_selector)
-        controls.addWidget(self.account_search, 1)
-        controls.addWidget(load_button)
-        controls.addWidget(snapshot_button)
-        controls.addWidget(export_button)
-        panel_layout.addLayout(controls)
-
-        self.completeness_label = QLabel("Load a list to see retrieval and completeness information.")
-        self.completeness_label.setObjectName("Muted")
-        panel_layout.addWidget(self.completeness_label)
-
-        self.account_table = QTableWidget(0, 6)
-        self.account_table.setHorizontalHeaderLabels(
-            ["#", "Profile", "Username", "Account Type", "Visibility", "Verified"]
-        )
-        self.account_table.horizontalHeader().setSectionResizeMode(
-            QHeaderView.ResizeMode.Stretch
-        )
-        self.account_table.setAlternatingRowColors(True)
-        panel_layout.addWidget(self.account_table, 1)
-        layout.addWidget(panel)
-        return page
-
-    def _engagement_page(self) -> QWidget:
-        """Create a post engagement and comment/emoji analysis screen."""
-        page = QWidget()
-        layout = QHBoxLayout(page)
-        post, post_layout = self._panel("Post Engagement Explorer", "Example content; real results depend on provider access.")
-        post_layout.addWidget(QLabel("travel_diary  •  Sunset vibes 🌅"))
-        image = QLabel("POST MEDIA PREVIEW")
-        image.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        image.setMinimumHeight(300)
-        image.setStyleSheet("background:#263B5D;border-radius:10px;font-size:18pt;")
-        post_layout.addWidget(image)
-        post_layout.addWidget(QLabel("♡ 12.4K likes     342 comments"))
-        post_layout.addWidget(QLabel("Emoji in retrieved comments: ❤️ 48   😍 31   👍 12"))
-        layout.addWidget(post, 2)
-
-        comments, comments_layout = self._panel("Comments & Replies", "Visible demo comment threads")
-        for line in [
-            "sarah_jones  Amazing! 😍  •  12 likes",
-            "   Reply: Thank you! ❤️",
-            "mike_smith  Beautiful view 👍  •  8 likes",
-            "   Reply: Appreciate it!",
-            "laura_brown  Love this place 🔥  •  5 likes",
-        ]:
-            comments_layout.addWidget(QLabel(line))
-        comments_layout.addStretch()
-        layout.addWidget(comments, 1)
-        return page
-
-    def _mentions_page(self) -> QWidget:
-        """Create a mentions and tags timeline."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel(
-            "Mentions & Tags Center",
-            "Only mentions and tags actually returned by an authorised provider are shown."
-        )
-        for entry in [
-            "travel_diary mentioned your account in a post  •  Demo",
-            "You were tagged in a photo  •  Demo",
-            "foodie_life mentioned you in a story  •  Demo",
-        ]:
-            panel_layout.addWidget(QLabel("◉  " + entry))
-        layout.addWidget(panel)
-        return page
-
-    def _stories_page(self) -> QWidget:
-        """Create story and highlight collections in a familiar visual arrangement."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel("Stories & Highlights", "Sample story circles and highlight collections.")
-        row = QHBoxLayout()
-        for label in ["Your Story", "Bali", "Japan", "Europe", "Food", "Nature"]:
-            item = QLabel(f"◉\n{label}")
-            item.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            item.setMinimumHeight(100)
-            item.setStyleSheet("background:#202D49;border:2px solid #A855F7;border-radius:14px;padding:8px;")
-            row.addWidget(item)
-        panel_layout.addLayout(row)
-        panel_layout.addWidget(QLabel("Select a collection in a live provider integration to open its media."))
-        layout.addWidget(panel)
-        return page
-
-    def _insights_page(self) -> QWidget:
-        """Show account type and visibility counts for loaded account records."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel(
-            "Account Classification & Insights",
-            "This page does not infer gender from names or photos. Gender is unknown unless explicitly supplied as authorised aggregate data."
-        )
-        self.insights_label = QLabel("Load followers or following to calculate account category counts.")
-        panel_layout.addWidget(self.insights_label)
-        refresh = QPushButton("Refresh from current list")
-        refresh.clicked.connect(self._refresh_insights)
-        panel_layout.addWidget(refresh)
-        layout.addWidget(panel)
-        return page
-
-    def _snapshots_page(self) -> QWidget:
-        """Display locally saved snapshot metadata."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel("Snapshots & History", "Snapshots are stored locally in SQLite.")
-        refresh = QPushButton("Refresh Snapshot History")
-        refresh.clicked.connect(self._refresh_snapshots)
-        panel_layout.addWidget(refresh)
-        self.snapshot_table = QTableWidget(0, 7)
-        self.snapshot_table.setHorizontalHeaderLabels(
-            ["ID", "Profile", "List", "Created", "Returned", "Expected", "Complete"]
-        )
-        self.snapshot_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        panel_layout.addWidget(self.snapshot_table)
-        layout.addWidget(panel)
-        return page
-
-    def _compare_page(self) -> QWidget:
-        """Provide snapshot comparison using the two most recent snapshots."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel("Snapshot Comparison", "Compare the two latest snapshots of the same list.")
-        compare = QPushButton("Compare Latest Snapshots")
-        compare.setObjectName("PrimaryButton")
-        compare.clicked.connect(self._compare_snapshots)
-        panel_layout.addWidget(compare)
-        self.compare_result = QLabel("No comparison run yet.")
-        self.compare_result.setWordWrap(True)
-        panel_layout.addWidget(self.compare_result)
-        layout.addWidget(panel)
-        return page
-
-    def _export_page(self) -> QWidget:
-        """Show export options and their availability."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel("Export Center", "Export locally collected account-list data.")
-        button = QPushButton("Export Current Account List as CSV")
-        button.setObjectName("PrimaryButton")
-        button.clicked.connect(self._export_accounts)
-        panel_layout.addWidget(button)
-        panel_layout.addWidget(QLabel("Supported in this starter release: CSV account-list export."))
-        layout.addWidget(panel)
-        return page
-
-    def _settings_page(self) -> QWidget:
-        """Show basic workspace and data-storage settings."""
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        panel, panel_layout = self._panel("Settings", "Local-first workspace settings.")
-        panel_layout.addWidget(QLabel(f"Data directory: {self.data_dir}"))
-        panel_layout.addWidget(QLabel("Theme: Premium Dark"))
-        panel_layout.addWidget(QLabel("Provider: Local Demo Provider"))
-        panel_layout.addWidget(QLabel("No Instagram password or session token is stored by this demo build."))
-        layout.addWidget(panel)
-        return page
-
-    def _show_page(self, index: int) -> None:
-        """Switch the visible page and update the selected navigation button."""
-        self.pages.setCurrentIndex(index)
-        for button_index, button in enumerate(self.nav_buttons):
-            button.setChecked(button_index == index)
-        if index == 8:
-            self._refresh_snapshots()
-
-    def _load_accounts(self, *_args) -> None:
-        """Fetch a complete demo list and display truthful retrieval status."""
-        self.current_list_type = self.list_selector.currentText()
-        if self.current_list_type == "Followers":
-            accounts, status = self.provider.get_followers(self.profile)
+    # -- behaviour ----------------------------------------------------------------
+    def show_page(self, key: str) -> None:
+        page = self.pages.get(key)
+        if not page:
+            return
+        self.current = key
+        self.stack.setCurrentWidget(page)
+        if key in self.nav_buttons:
+            self.nav_buttons[key].setChecked(True)
         else:
-            accounts, status = self.provider.get_following(self.profile)
+            self.group.setExclusive(False)
+            for b in self.nav_buttons.values():
+                b.setChecked(False)
+            self.group.setExclusive(True)
+        page.on_show()
+        self._profile_changed("")
 
-        self.current_accounts = accounts
-        self.current_status = status
-        self.completeness_label.setText(
-            f"{status.returned_count} of {status.expected_count} loaded  •  "
-            f"{'COMPLETE' if status.complete else 'PARTIAL'}  •  "
-            f"{status.source}  •  {status.message}"
-        )
-        self._populate_account_table(accounts)
-        logging.info("Loaded %s demo records for %s", len(accounts), self.current_list_type)
+    def _profile_changed(self, _u: str) -> None:
+        self.profile_chip.setText(f"@{self.ctx.profile}")
+        self.provider_chip.setText(("DEMO · " if self.ctx.is_demo else "") + self.ctx.provider_label)
+        self.provider_chip.setObjectName("ChipWarn" if self.ctx.is_demo else "ChipOk")
+        self.provider_chip.style().unpolish(self.provider_chip)
+        self.provider_chip.style().polish(self.provider_chip)
+        self.acct.setText(f"Active profile\n@{self.ctx.profile}")
 
-    def _populate_account_table(self, accounts: list[Account]) -> None:
-        """Render account records into the explorer table."""
-        self.account_table.setRowCount(len(accounts))
-        for row_index, account in enumerate(accounts):
-            values = [
-                str(row_index + 1),
-                account.display_name,
-                account.username,
-                account.account_type,
-                account.visibility,
-                "Yes" if account.verified else "No",
-            ]
-            for column, value in enumerate(values):
-                self.account_table.setItem(row_index, column, QTableWidgetItem(value))
+    def _refresh_bell(self) -> None:
+        n = self.ctx.db.unread_count()
+        self.bell.setText(f"🔔 {n}" if n else "🔔")
 
-    def _filter_accounts(self, query: str) -> None:
-        """Filter the currently loaded account records by name or username."""
-        query = query.casefold().strip()
-        filtered = [
-            account
-            for account in self.current_accounts
-            if query in account.username.casefold()
-            or query in account.display_name.casefold()
-        ]
-        self._populate_account_table(filtered)
+    def apply_theme(self) -> None:
+        t = self.ctx.theme
+        app = QApplication.instance()
+        app.setStyleSheet(build_stylesheet(t))
+        pal = QPalette(app.palette())
+        text = QColor(t.palette()["text"])
+        for role in (QPalette.ColorRole.WindowText, QPalette.ColorRole.Text, QPalette.ColorRole.ButtonText):
+            pal.setColor(role, text)
+        pal.setColor(QPalette.ColorRole.Link, QColor(t.accent_hex))
+        pal.setColor(QPalette.ColorRole.LinkVisited, QColor(t.accent_hex))
+        app.setPalette(pal)
+        compact = t.sidebar_compact
+        self.sidebar.setFixedWidth(64 if compact else 250)
+        for b in self.nav_buttons.values():
+            b.setText(b.property("icon_only") if compact else b.property("full"))
+        for w in (self.brand, self.sub, self.acct, *self.section_labels):
+            w.setVisible(not compact)
+        self.centralWidget().update()
+        self._profile_changed("")
 
-    def _take_snapshot(self) -> None:
-        """Save the currently loaded provider result as a local snapshot."""
-        if not self.current_accounts or not self.current_status:
-            QMessageBox.information(self, "No data loaded", "Load a follower/following list first.")
+    def _cycle_done(self, profile: str, status: str, changes: list) -> None:
+        self._refresh_bell()
+        if changes:
+            body = "\n".join(changes[:5])
+            self.ctx.toast.emit(f"Monitoring: @{profile}", body)
+            if self.tray and self.ctx.db.get_setting("desktop_notifications", True):
+                self.tray.showMessage(f"@{profile}: {len(changes)} change(s) detected", body,
+                                      QSystemTrayIcon.MessageIcon.Information, 6000)
+        elif status == "error":
+            self.ctx.toast.emit("Monitoring problem", f"The check for @{profile} failed. See Notifications.")
+        if self.current in ("dashboard", "timeline", "notifications", "monitor"):
+            self.pages[self.current].on_show()
+
+    def _restore(self) -> None:
+        self.showNormal()
+        self.raise_()
+        self.activateWindow()
+
+    def _quit(self) -> None:
+        self._really_quit = True
+        QApplication.quit()
+
+    def closeEvent(self, e):  # noqa: N802
+        if self.tray and self.ctx.db.get_setting("close_to_tray", True) and not getattr(self, "_really_quit", False):
+            e.ignore()
+            self.hide()
+            if not self.ctx.db.get_setting("tray_hint_shown", False):
+                self.tray.showMessage("Still running", "Monitoring continues in the tray. Right-click the icon to quit.",
+                                      QSystemTrayIcon.MessageIcon.Information, 5000)
+                self.ctx.db.save_setting("tray_hint_shown", True)
             return
-        snapshot_id = self.database.save_snapshot(
-            profile=self.profile,
-            list_type=self.current_list_type,
-            accounts=self.current_accounts,
-            source=self.current_status.source,
-            complete=self.current_status.complete,
-            expected_count=self.current_status.expected_count,
-        )
-        QMessageBox.information(self, "Snapshot saved", f"Snapshot #{snapshot_id} saved locally.")
-        self._refresh_snapshots()
-
-    def _refresh_snapshots(self) -> None:
-        """Reload snapshot metadata from SQLite."""
-        if not hasattr(self, "snapshot_table"):
-            return
-        rows = self.database.list_snapshots()
-        self.snapshot_table.setRowCount(len(rows))
-        for row_index, row in enumerate(rows):
-            values = [
-                str(row["id"]),
-                row["profile"],
-                row["list_type"],
-                row["created_at"][:19].replace("T", " "),
-                str(row["returned_count"]),
-                str(row["expected_count"] if row["expected_count"] is not None else "Unknown"),
-                "Yes" if row["complete"] else "No",
-            ]
-            for column, value in enumerate(values):
-                self.snapshot_table.setItem(row_index, column, QTableWidgetItem(value))
-
-    def _compare_snapshots(self) -> None:
-        """Compare the latest two snapshots for the same profile and list type."""
-        rows = self.database.list_snapshots()
-        if len(rows) < 2:
-            self.compare_result.setText("At least two snapshots are required.")
-            return
-        latest = rows[0]
-        previous = next(
-            (
-                row for row in rows[1:]
-                if row["profile"] == latest["profile"]
-                and row["list_type"] == latest["list_type"]
-            ),
-            None,
-        )
-        if previous is None:
-            self.compare_result.setText("No earlier snapshot exists for the same profile and list type.")
-            return
-        added, removed = compare_usernames(
-            self.database.get_snapshot_usernames(previous["id"]),
-            self.database.get_snapshot_usernames(latest["id"]),
-        )
-        self.compare_result.setText(
-            f"Comparing snapshot #{previous['id']} with #{latest['id']}:\n"
-            f"Newly observed: {len(added)}\nNo longer observed: {len(removed)}\n"
-            f"New accounts: {', '.join(added[:20]) or 'None'}\n"
-            f"Removed accounts: {', '.join(removed[:20]) or 'None'}"
-        )
-
-    def _refresh_insights(self) -> None:
-        """Summarise only fields explicitly supplied by the current provider data."""
-        if not self.current_accounts:
-            self.insights_label.setText("Load a list in Followers & Following first.")
-            return
-        type_counts = classify_accounts(self.current_accounts)
-        public_count = sum(item.visibility == "Public" for item in self.current_accounts)
-        private_count = sum(item.visibility == "Private" for item in self.current_accounts)
-        self.insights_label.setText(
-            f"Accounts loaded: {len(self.current_accounts)}\n"
-            f"Public: {public_count}  •  Private: {private_count}\n"
-            f"Account categories: {type_counts}\n"
-            "Gender breakdown: Not available from this demo provider; no gender is inferred."
-        )
-
-    def _export_accounts(self) -> None:
-        """Export the current account list as a UTF-8 CSV file."""
-        if not self.current_accounts:
-            QMessageBox.information(self, "No data", "Load a list before exporting.")
-            return
-        path, _ = QFileDialog.getSaveFileName(
-            self, "Export account list", "accounts.csv", "CSV files (*.csv)"
-        )
-        if not path:
-            return
-        with open(path, "w", newline="", encoding="utf-8-sig") as handle:
-            writer = csv.writer(handle)
-            writer.writerow(["username", "display_name", "account_type", "visibility", "verified"])
-            for account in self.current_accounts:
-                writer.writerow([
-                    account.username,
-                    account.display_name,
-                    account.account_type,
-                    account.visibility,
-                    account.verified,
-                ])
-        QMessageBox.information(self, "Export complete", f"Saved {len(self.current_accounts)} rows.")
+        self.scheduler.timer.stop()
+        e.accept()

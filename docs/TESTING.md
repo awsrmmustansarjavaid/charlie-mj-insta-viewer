@@ -1,18 +1,4 @@
 # Testing
-
-Run unit tests:
-
-```powershell
-pip install -r requirements-dev.txt
-pytest -q
-```
-
-Manual Windows release checklist:
-- Launch on a clean Windows 10/11 64-bit machine.
-- Launch from a writable folder and from a read-only folder.
-- Confirm fallback data directory behaviour.
-- Load both 587-row demo lists and check visible completion status.
-- Save snapshots, restart the app, and confirm history persists.
-- Compare two snapshots and verify additions/removals.
-- Export CSV and open it in Excel.
-- Confirm no credentials or private data are written to logs.
+`pytest` runs 41 tests: analytics (emoji, groups, relationships, no gender inference), database (snapshots, backup/restore, dedupe, deletion), providers (export parsing incl. zips and multiple layouts, Graph API with mocked HTTP, HTTPS enforcement), monitoring (baseline, idempotency, auto-pause, no demo fallback) and offscreen UI smoke tests (all 17 pages, 587-row followers table, filtering, post/story viewers, reply round-trip, theme switch).
+`python scripts/screenshots.py OUT_DIR` renders the key screens headlessly.
+Manual checklist before release: build exe on Windows, open every page, import a real export zip, run a monitor, restore a backup, test tray/notifications.

@@ -1,96 +1,86 @@
 # Instagram Research Suite
 
-A Windows desktop research workspace with an Instagram-inspired browsing UI, local snapshots,
-engagement exploration, mentions, account classification, and export tools.
+A Windows **portable desktop app** (Python + PySide6 + SQLite) that gives you an Instagram-style viewer and a research dashboard for Instagram data **you are authorised to access**: complete follower/following lists with snapshots, account classification, post/comment/emoji analytics, mentions, monitoring and reports.
 
-> **Data access notice:** This repository ships with a clearly labelled demo data provider.
-> Instagram does not provide unrestricted access to arbitrary accounts' follower/following
-> lists, private stories, likes, or comments. Real integrations must use Meta-authorised
-> permissions or another lawful, supported source. The application never bypasses login,
-> access controls, private-account restrictions, or rate limits.
+![Dashboard](docs/screenshots/dashboard.png)
 
-## Features in this starter release
+## Your requirements, and how each is delivered
 
-- Dark dashboard with sidebar navigation and responsive desktop panels.
-- Instagram-style feed/profile/story/highlight browsing using demo content.
-- Follower and following explorer with search, completeness state, and local snapshots.
-- Snapshot history and added/removed comparison.
-- Account-type and public/private breakdown; gender is shown as **unknown** unless a
-  source explicitly provides authorised aggregate demographic data.
-- Post engagement view with demo comments/replies and emoji frequency analysis.
-- Mentions and tags timeline (only records supplied by the connected provider).
-- CSV export for account lists.
-- SQLite persistence, settings, structured logging, and tests.
+| # | You asked for | What the app does |
+|---|---|---|
+| 1 | See **all** followers and following (587 of 587) and take snapshots | Full-list explorer with a live **"587 of 587 loaded"** completeness indicator, search/sort/filter, 5 relationship tabs (Followers, Following, Mutuals, Not following back, You don't follow back), saved snapshots, two-snapshot diff, CSV/Excel/PDF/HTML/JSON/Markdown export. Complete lists come from your own **Instagram data export** (see below). |
+| 2 | How many girl/boy accounts and public pages | Account-type breakdown (personal / business / creator / brand / media), public vs private, verified. **Gender**: aggregate audience gender from Instagram Insights for accounts you own; otherwise *Unknown*. The app deliberately never guesses gender from names or photos. |
+| 3 | Likes, comments, replies, heart/thumbs-up counts | Post viewer with comments **and nested replies**, reply box, per-post and all-post emoji analysis (hearts, thumbs-up, laughing, fire, applause…), sentiment indicator, top commenters, engagement rate. Emoji are counted from retrieved comment text; Instagram has no public per-reaction breakdown. |
+| 4 | Who is mentioned in posts and stories | Mentions & Tags center: caption / comment / story / tag mentions with "first detected" time, filters, export. Story mentions appear where the source exposes them. |
+| 5 | Exactly like the Instagram app | Home feed with story-ring tray, profile page with highlights and grid, post viewer (carousel, reel, keyboard nav, full-screen), story viewer (segmented progress, tap zones, auto-advance, mention chips), dark/light themes. |
 
-## Requirements
+Plus: background monitoring with Windows tray notifications, provider manager with health checks, download manager with duplicate detection, backup/restore, command palette (**Ctrl+K**), wallpaper/theme personalisation.
 
-- Windows 10/11 (64-bit)
-- Python 3.11+
-- Internet connection only if a future provider integration requires it
+## Where data comes from (read this first)
 
-## Run from source
+Instagram does not publish an open API for arbitrary accounts. The app is honest about that and uses three sources:
 
-```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
+| Source | Good for | Not available from it |
+|---|---|---|
+| **Instagram data export** (your own download, JSON) | **Complete followers & following lists with connection dates**, for your own account | Other people's lists |
+| **Official Meta Graph API** (Business/Creator account + token) | Your profile, posts, reels, **comments & replies**, stories, tagged media, audience insights; public stats of other Business/Creator accounts | Follower/following username lists, highlights, others' comments |
+| **Demo provider** (built in) | Exploring every screen offline with fictional data (587 followers / 587 following) | Anything real |
+
+Every screen shows the source and an availability status (`AVAILABLE`, `PARTIALLY AVAILABLE`, `NOT PUBLICLY AVAILABLE`, `PERMISSION REQUIRED`, `PROVIDER UNAVAILABLE`, `HISTORICAL DATA REQUIRED`). Nothing is guessed or invented, and a failed real provider **never silently falls back to demo data**.
+
+Not provided, by design: covert/anonymous scraping of other accounts' private data, "last seen" activity, registration email/phone/location, who viewed or liked something. See [docs/FEATURES.md](docs/FEATURES.md).
+
+## Get a complete follower/following list (the 587-of-587 workflow)
+1. Instagram → Settings → **Accounts Center** → *Your information and permissions* → **Download your information** → *Followers and following* → format **JSON**.
+2. In the app: **Followers & Following → Import Instagram data export…** and pick the `.zip`.
+3. Both lists are imported as snapshots. Repeat the export later; the app diffs it against earlier snapshots (new / removed followers, new / removed following).
+
+## Quick start
+**From source (Windows/macOS/Linux)**
+```bash
+python -m venv .venv && . .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python main.py
 ```
+The app starts in **Demo mode** so every feature is explorable immediately. Use **Monitoring → Simulate time passing** to watch snapshot diffs, new-follower/unfollow detection and notifications work.
 
-## Build a portable Windows executable
-
-Run on Windows, not Linux/macOS:
-
+**Build the portable .exe (Windows)**
 ```powershell
-.\scripts\build_windows.ps1
+.\scripts\build_windows.ps1            # portable folder  -> dist\InstagramResearchSuite\
+.\scripts\build_windows.ps1 -OneFile   # single exe       -> dist\InstagramResearchSuite.exe
+```
+Data lives in a `data\` folder beside the exe (falls back to `%LOCALAPPDATA%` if that location is read-only). Custom location: `--data-dir D:\IRSData`. Start hidden in the tray: `--minimized`.
+
+## Connect the official API (optional)
+Provider manager → *Instagram Graph API* → enter access token, Instagram user ID and your username → **Save & test**. The token is stored in **Windows Credential Manager**, never in the database, logs or exports. Required permissions: `instagram_basic`, `instagram_manage_comments`, `instagram_manage_insights`. See [docs/PROVIDERS.md](docs/PROVIDERS.md).
+
+## Screenshots
+| Instagram view | Profile & highlights |
+|---|---|
+| ![feed](docs/screenshots/feed.png) | ![profile](docs/screenshots/profile.png) |
+| **Followers (587 of 587)** | **Post viewer: comments, replies, emoji** |
+| ![followers](docs/screenshots/followers.png) | ![post](docs/screenshots/post_viewer_emoji.png) |
+| **Account insights** | **Story viewer** |
+| ![insights](docs/screenshots/insights.png) | ![story](docs/screenshots/story_viewer.png) |
+
+## Project layout
+```
+main.py                      entry point
+app/providers/               Provider contract, demo, Graph API, data-export importer, registry (health + fallback)
+app/services/                analytics, snapshots, monitoring engine, exporter, downloader  (no Qt, fully tested)
+app/data/database.py         SQLite schema, migrations, backup/restore
+app/ui/                      theme engine, widgets, viewers (post/story), scheduler, 17 pages
+tests/                       41 tests (backend + offscreen UI smoke tests)
+docs/                        architecture, providers, features, security, DB schema, build, testing
 ```
 
-The build creates `dist\InstagramResearchSuite\InstagramResearchSuite.exe` using PyInstaller
-one-folder mode. The `data` directory is stored beside the executable in portable mode when
-writable; otherwise the app uses the user's local application-data directory.
-
-For a single-file executable, change `--onedir` to `--onefile` in the build script. One-folder
-mode is recommended for startup speed, diagnostics, and predictable asset handling.
-
-## GitHub setup
-
-1. Create an empty GitHub repository named `InstagramResearchSuite`.
-2. Extract this project.
-3. Run:
-
-```powershell
-git init
-git add .
-git commit -m "Initial Instagram Research Suite desktop app"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/InstagramResearchSuite.git
-git push -u origin main
+## Tests
+```bash
+pip install -r requirements-dev.txt
+pytest          # 41 tests, offscreen Qt
+ruff check .
 ```
+The Graph API provider is tested against **mocked** responses. It has not been exercised against Meta's live servers, so verify with your own token and review Meta's current permission/review requirements.
 
-## Provider integration contract
-
-Implement `app/services/provider.py` and provide an implementation of `InstagramDataProvider`.
-A provider must report source, retrieval time, completeness, pagination state, and any limitation.
-Do not silently label partial results as complete.
-
-## Current release status
-
-This is a functional desktop foundation with local demo data and local snapshot workflows.
-It is not an official Instagram client, does not authenticate to Instagram, and does not
-promise arbitrary-account or private-account access. Real provider integrations are a
-separate, permission-dependent milestone.
-
-## Quality checks
-
-```powershell
-python -m pip install -r requirements-dev.txt
-python -m ruff check .
-python -m compileall -q main.py app instagram_research_suite tests
-python -m pytest -q
-```
-
-The CI workflow runs linting, compilation, and tests, then builds the Windows portable
-folder distribution and uploads it as a GitHub Actions artifact. The historical
-`instagram_research_suite.storage.database` import remains available as a compatibility
-shim; new code should import `Database` from `app.data.database`.
+## Disclaimer
+Independent project, not affiliated with Instagram or Meta. Use only with accounts and data you are authorised to access, and follow Instagram's Terms and applicable privacy law.

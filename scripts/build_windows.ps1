@@ -1,40 +1,18 @@
-# Build a portable Windows folder distribution with PyInstaller.
-# Run from any working directory; paths are resolved from this script location.
-
+<#
+ Builds the portable Windows app.
+   .\scripts\build_windows.ps1            -> dist\InstagramResearchSuite\ (portable folder, fastest start)
+   .\scripts\build_windows.ps1 -OneFile   -> dist\InstagramResearchSuite.exe (single file)
+ Requires Python 3.10+ on PATH.
+#>
+param([switch]$OneFile)
 $ErrorActionPreference = "Stop"
-$RepoRoot = Split-Path -Parent $PSScriptRoot
-Set-Location $RepoRoot
-
-python -m pip install --upgrade pip
-python -m pip install -r requirements-dev.txt
-
-# Remove stale build outputs so old packages cannot leak into the executable.
-if (Test-Path "build") { Remove-Item "build" -Recurse -Force }
-if (Test-Path "dist") { Remove-Item "dist" -Recurse -Force }
-
-# Explicit paths and submodule collection make the app package discoverable
-# when PyInstaller analyses the entry point on a clean Windows runner.
-python -m PyInstaller `
-    --noconfirm `
-    --clean `
-    --windowed `
-    --onedir `
-    --name InstagramResearchSuite `
-    --paths $RepoRoot `
-    --collect-submodules app `
-    --collect-submodules instagram_research_suite `
-    --collect-all PySide6 `
-    --hidden-import app.data `
-    --hidden-import app.data.database `
-    main.py
-
-if ($LASTEXITCODE -ne 0) {
-    throw "PyInstaller failed with exit code $LASTEXITCODE"
-}
-
-# Keep writable portable data beside the executable.
-New-Item -ItemType Directory -Force -Path "dist\InstagramResearchSuite\data" | Out-Null
-if (-not (Test-Path "dist\InstagramResearchSuite\InstagramResearchSuite.exe")) {
-    throw "Build finished but the expected executable was not created."
-}
-Write-Host "Build complete: dist\InstagramResearchSuite\InstagramResearchSuite.exe"
+Set-Location (Split-Path $PSScriptRoot -Parent)
+if (-not (Test-Path .venv)) { python -m venv .venv }
+& .\.venv\Scripts\python.exe -m pip install --upgrade pip
+& .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+& .\.venv\Scripts\python.exe -m pytest -q
+if ($OneFile) { $env:IRS_ONEFILE = "1" } else { Remove-Item Env:IRS_ONEFILE -ErrorAction SilentlyContinue }
+& .\.venv\Scripts\python.exe -m PyInstaller --noconfirm --clean InstagramResearchSuite.spec
+if ($OneFile) { $out = "dist\InstagramResearchSuite.exe" } else { $out = "dist\InstagramResearchSuite\InstagramResearchSuite.exe" }
+Write-Host "`nBuilt: $out"
+Write-Host "Portable: data is stored in a 'data' folder next to the .exe (falls back to %LOCALAPPDATA% if read-only)."

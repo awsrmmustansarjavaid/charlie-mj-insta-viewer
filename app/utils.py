@@ -1,46 +1,55 @@
-"""Shared application utilities."""
+"""Small formatting helpers."""
 
 from __future__ import annotations
 
-import logging
-import os
-import sys
-from pathlib import Path
+from datetime import datetime, timezone
 
 
-APP_FOLDER = "InstagramResearchSuite"
+def parse_dt(ts: str) -> datetime | None:
+    try:
+        dt = datetime.fromisoformat(ts)
+    except (TypeError, ValueError):
+        return None
+    return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
 
 
-def get_data_directory() -> Path:
-    """Return a writable portable data path, falling back to user app data."""
-    executable_dir = Path(sys.executable).resolve().parent
-    source_dir = Path(__file__).resolve().parents[1]
-    candidates = [executable_dir / "data", source_dir / "data"]
-
-    for candidate in candidates:
-        try:
-            candidate.mkdir(parents=True, exist_ok=True)
-            probe = candidate / ".write_test"
-            probe.write_text("ok", encoding="utf-8")
-            probe.unlink(missing_ok=True)
-            return candidate
-        except OSError:
-            continue
-
-    base = Path(os.environ.get("LOCALAPPDATA", Path.home()))
-    fallback = base / APP_FOLDER
-    fallback.mkdir(parents=True, exist_ok=True)
-    return fallback
+def ago(ts: str) -> str:
+    """'2h', '3d', '5w' style relative time like Instagram."""
+    dt = parse_dt(ts)
+    if not dt:
+        return ""
+    secs = max(0, int((datetime.now(timezone.utc) - dt).total_seconds()))
+    for unit, size in (("w", 604800), ("d", 86400), ("h", 3600), ("m", 60)):
+        if secs >= size:
+            return f"{secs // size}{unit}"
+    return "now"
 
 
-def configure_logging(log_path: Path) -> None:
-    """Configure rotating-friendly basic logging without recording credentials."""
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        handlers=[
-            logging.FileHandler(log_path, encoding="utf-8"),
-            logging.StreamHandler(),
-        ],
-    )
+def fmt_count(n: int | None) -> str:
+    if n is None:
+        return "–"
+    if n >= 1_000_000:
+        return f"{n / 1_000_000:.1f}M"
+    if n >= 10_000:
+        return f"{n / 1000:.1f}k"
+    return f"{n:,}"
+
+
+def fmt_dt(ts: str) -> str:
+    dt = parse_dt(ts)
+    return dt.astimezone().strftime("%Y-%m-%d %H:%M") if dt else (ts or "")
+
+
+def parse_username(text: str) -> str:
+    """Accept '@name', 'name' or an instagram.com profile URL."""
+    import re
+
+    text = (text or "").strip()
+    m = re.search(r"instagram\.com/(?:_u/)?([A-Za-z0-9._]+)", text)
+    return (m.group(1) if m else text).strip("/@ ").lower()
+
+
+def ago_long(ts: str) -> str:
+    """'3h ago' or 'just now'."""
+    short = ago(ts)
+    return "" if not short else ("just now" if short == "now" else f"{short} ago")

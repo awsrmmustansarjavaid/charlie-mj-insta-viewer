@@ -1,0 +1,3 @@
+# Database (SQLite, schema v2)
+`settings` · `profiles` · `profile_snapshots` (JSON per check) · `snapshots` (profile, list_type, source, complete, expected/returned) · `snapshot_accounts` (per snapshot) · `events` (UNIQUE dedupe_key) · `mentions` (UNIQUE per profile/type/by/mentioned/ref; `detected_at` = first seen) · `post_snapshots` (likes/comments over time) · `seen_items` · `monitors` · `notifications` · `downloads` · `search_history`.
+Migration: v1 (starter release) snapshot tables are rebuilt on first start; other data is preserved. WAL mode; online backup via SQLite backup API; restore validates integrity and keeps a `.before-restore` copy.
