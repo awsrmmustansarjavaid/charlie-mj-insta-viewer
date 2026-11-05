@@ -1,4 +1,9 @@
 # Changelog
+## 1.0.3
+* Workflows now use the same file names as the earlier prototype's (`tests.yml` = "Tests and lint", `windows-build.yml` = "Windows build", plus `ci.yml`), so uploading them overwrites the old failing ones. All call tools via `python -m`.
+* `pip install -e ".[dev]"` now works (added `dev` extra, explicit package discovery, build-system table).
+* Ruff ignores a legacy `src/` folder if one is still present in the repo.
+
 ## 1.0.2
 * Release candidate: verified from a clean `git clone` (ruff + 41 tests), and verified that a PyInstaller build of the app starts and creates its data folder (Linux). Pinned dev tool versions, added `.gitattributes`, added docs/GITHUB-SETUP.md.
 

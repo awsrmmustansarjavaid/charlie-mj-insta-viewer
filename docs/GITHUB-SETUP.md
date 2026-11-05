@@ -22,3 +22,9 @@
    Tagged builds attach `InstagramResearchSuite-portable.zip` and `InstagramResearchSuite.exe` to a GitHub Release. Make sure *Settings → Actions → General → Workflow permissions* is set to **Read and write** so the release step can publish.
 
 Local checks that mirror CI: `python -m ruff check .` and `python -m pytest`.
+
+## Cleaning up an existing repository (no command line needed)
+1. **Delete the old code**: on github.com open the `src` folder → click the **⋯** menu (top right of the file list) → **Delete directory** → commit. Do the same for any old test files in `tests/` that import `instagram_research_suite`.
+2. **Overwrite the workflows**: in `.github/workflows/` the repository should contain exactly `ci.yml`, `tests.yml`, `windows-build.yml`. Use **Add file → Upload files** and drag in the `.github` folder from the patch zip (same names overwrite). Delete any other workflow file (for example `build-windows.yml`).
+3. Upload `pyproject.toml`, `app/__init__.py`, `version_info.txt`, `CHANGELOG.md` from the patch zip.
+4. Open the **Actions** tab: all runs should now be green. If one is red, open it and send me the log.
