@@ -1,6 +1,6 @@
 [project]
 name = "instagram-research-suite"
-version = "1.0.0"
+version = "1.0.2"
 description = "Windows portable desktop suite for viewing, analysing and monitoring Instagram data you are authorised to access"
 requires-python = ">=3.10"
 license = { text = "MIT" }
